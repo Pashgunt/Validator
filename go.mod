@@ -1,3 +1,3 @@
-module validator
+module github.com/Pashgunt/Validator
 
-go 1.24
+go 1.24.0
