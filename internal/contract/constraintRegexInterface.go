@@ -7,9 +7,13 @@ import (
 type ConstraintRegexInterface interface {
 	Pattern() regexp.Regexp
 	Message() string
-	ProcessValidators() []Validator
+	ConstraintInterface
 }
 
 type Validator interface {
-	Process(regexConstraint ConstraintRegexInterface, value interface{})
+	Process(
+		regexConstraint ConstraintRegexInterface,
+		value interface{},
+		exception ValidationFailedExceptionInterface,
+	)
 }
