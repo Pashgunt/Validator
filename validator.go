@@ -3,6 +3,7 @@ package validator
 import (
 	"github.com/Pashgunt/Validator/internal/contract"
 	"github.com/Pashgunt/Validator/internal/enum"
+	maphelper "github.com/Pashgunt/Validator/internal/helper/map"
 	structhelper "github.com/Pashgunt/Validator/internal/helper/struct"
 	"github.com/Pashgunt/Validator/internal/violation"
 	"reflect"
@@ -32,20 +33,31 @@ func NewSimpleValidator() *SimpleValidator {
 func (v *SimpleValidator) Validate(value interface{}, constraints Collection) {
 	reflectValue := reflect.ValueOf(value)
 
-	if reflectValue.Kind() == reflect.Ptr {
+	switch reflectValue.Kind() {
+	case reflect.Ptr:
 		reflectValue = reflectValue.Elem()
-	}
-
-	if reflectValue.Kind() == reflect.Struct {
-		v.processInitValidate(structhelper.GetFillValidateData(reflectValue), constraints, reflectValue.String())
-
-		return
-	}
-
-	switch data := value.(type) {
-	case map[string]interface{}:
-		v.processInitValidate(data, constraints, reflectValue.String())
+		v.processInitValidate(
+			structhelper.GetFillValidateData(reflectValue),
+			constraints,
+			reflectValue.String(),
+		)
 		break
+	case reflect.Struct:
+		v.processInitValidate(
+			structhelper.GetFillValidateData(reflectValue),
+			constraints,
+			reflectValue.String(),
+		)
+		break
+	case reflect.Map:
+		v.processInitValidate(
+			maphelper.GetFillValidateData(reflectValue),
+			constraints,
+			reflectValue.String(),
+		)
+		break
+	default:
+		panic("Unsupported type for validate: " + reflectValue.Kind().String())
 	}
 }
 
