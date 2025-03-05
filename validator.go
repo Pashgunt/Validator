@@ -50,6 +50,16 @@ func (v *SimpleValidator) Validate(value interface{}, constraints Collection) {
 }
 
 func (v *SimpleValidator) ValidateValue(value interface{}, constraints AssertListValue) {
+	reflectValue := reflect.ValueOf(value)
+
+	if reflectValue.Kind() == reflect.Array || reflectValue.Kind() == reflect.Slice {
+		for i := 0; i < reflectValue.Len(); i++ {
+			v.ValidateValue(reflectValue.Index(i).Interface(), constraints)
+		}
+
+		return
+	}
+
 	v.doProcessConstraintValidate(constraints, value, enum.ValueRootAnonymous, enum.ValuePropertyAnonymous)
 }
 
@@ -62,6 +72,14 @@ func (v *SimpleValidator) processInitValidate(
 		constraintList, isset := constraints.Asserts()[property]
 
 		if !isset {
+			continue
+		}
+
+		reflectPropertyValue := reflect.ValueOf(propertyValue)
+
+		if reflectPropertyValue.Kind() == reflect.Slice || reflectPropertyValue.Kind() == reflect.Array {
+			v.ValidateValue(reflectPropertyValue.Interface(), constraintList)
+
 			continue
 		}
 
