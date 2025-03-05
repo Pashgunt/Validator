@@ -2,6 +2,7 @@ package validator
 
 import (
 	"github.com/Pashgunt/Validator/internal/contract"
+	"github.com/Pashgunt/Validator/internal/enum"
 	structhelper "github.com/Pashgunt/Validator/internal/helper/struct"
 	"github.com/Pashgunt/Validator/internal/violation"
 	"reflect"
@@ -9,6 +10,7 @@ import (
 
 type ValidatorInterface interface {
 	Validate(value interface{}, constraints Collection)
+	ValidateValue(value interface{}, constraints AssertListValue)
 }
 
 type ValidatorExceptionInterface interface {
@@ -47,6 +49,10 @@ func (v *SimpleValidator) Validate(value interface{}, constraints Collection) {
 	}
 }
 
+func (v *SimpleValidator) ValidateValue(value interface{}, constraints AssertListValue) {
+	v.doProcessConstraintValidate(constraints, value, enum.ValueRootAnonymous, enum.ValuePropertyAnonymous)
+}
+
 func (v *SimpleValidator) processInitValidate(
 	data map[string]interface{},
 	constraints Collection,
@@ -59,11 +65,20 @@ func (v *SimpleValidator) processInitValidate(
 			continue
 		}
 
-		for _, constraint := range constraintList {
-			v.setConstraintMainData(constraint, root, property)
-			for _, validator := range constraint.ProcessValidators() {
-				validator.Process(constraint, propertyValue, v.exception)
-			}
+		v.doProcessConstraintValidate(constraintList, propertyValue, root, property)
+	}
+}
+
+func (v *SimpleValidator) doProcessConstraintValidate(
+	constraintList AssertListValue,
+	value interface{},
+	root, property string,
+) {
+	for _, constraint := range constraintList {
+		v.setConstraintMainData(constraint, root, property)
+
+		for _, validator := range constraint.ProcessValidators() {
+			validator.Process(constraint, value, v.exception)
 		}
 	}
 }
