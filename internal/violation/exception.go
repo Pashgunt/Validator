@@ -32,10 +32,10 @@ func (v *ValidationFailedException) AddViolations(violations []contract.Constrai
 }
 
 type ConstraintViolation struct {
-	value        interface{}
-	propertyPath string
-	root         string
-	message      contract.ConstraintViolationMessageInterface
+	value             interface{}
+	propertyPathError string
+	rootError         string
+	message           contract.ConstraintViolationMessageInterface
 }
 
 func (c *ConstraintViolation) Value() interface{} {
@@ -46,20 +46,20 @@ func (c *ConstraintViolation) SetValue(value interface{}) {
 	c.value = value
 }
 
-func (c *ConstraintViolation) PropertyPath() string {
-	return c.propertyPath
+func (c *ConstraintViolation) PropertyPathError() string {
+	return c.propertyPathError
 }
 
-func (c *ConstraintViolation) SetPropertyPath(propertyPath string) {
-	c.propertyPath = propertyPath
+func (c *ConstraintViolation) SetPropertyPathError(propertyPath string) {
+	c.propertyPathError = propertyPath
 }
 
-func (c *ConstraintViolation) Root() string {
-	return c.root
+func (c *ConstraintViolation) RootError() string {
+	return c.rootError
 }
 
-func (c *ConstraintViolation) SetRoot(root string) {
-	c.root = root
+func (c *ConstraintViolation) SetRootError(root string) {
+	c.rootError = root
 }
 
 func (c *ConstraintViolation) Message() contract.ConstraintViolationMessageInterface {

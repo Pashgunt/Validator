@@ -10,4 +10,5 @@ type ConstraintMainDataInterface interface {
 	SetPropertyPath(propertyPath string)
 	Root() string
 	SetRoot(root string)
+	Message() string
 }

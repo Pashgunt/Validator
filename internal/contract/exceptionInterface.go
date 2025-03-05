@@ -12,10 +12,10 @@ type ValidationFailedExceptionInterface interface {
 type ConstraintViolationInterface interface {
 	Value() interface{}
 	SetValue(value interface{})
-	PropertyPath() string
-	SetPropertyPath(propertyPath string)
-	Root() string
-	SetRoot(root string)
+	PropertyPathError() string
+	SetPropertyPathError(propertyPath string)
+	RootError() string
+	SetRootError(root string)
 	Message() ConstraintViolationMessageInterface
 	SetMessage(message ConstraintViolationMessageInterface)
 }

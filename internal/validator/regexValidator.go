@@ -3,7 +3,7 @@ package validatorprocess
 import (
 	"fmt"
 	"github.com/Pashgunt/Validator/internal/contract"
-	"github.com/Pashgunt/Validator/internal/violation"
+	"github.com/Pashgunt/Validator/internal/factory"
 )
 
 type RegexValidator struct {
@@ -24,16 +24,9 @@ func (v *RegexValidator) Process(
 		return
 	}
 
-	constraintViolation := violation.ConstraintViolation{}
-	constraintViolation.SetValue(value)
-	constraintViolation.SetPropertyPath(regexConstraint.PropertyPath())
-	constraintViolation.SetRoot(regexConstraint.Root())
-
-	constraintViolationMessage := violation.ConstraintViolationMessage{}
-	constraintViolationMessage.SetMessage(regexConstraint.Message())
-	constraintViolationMessage.SetTemplate(regexConstraint.Message())
-
-	constraintViolation.SetMessage(&constraintViolationMessage)
 	exception.AppendMessageGeneral(regexConstraint.Message())
-	exception.AddViolations([]contract.ConstraintViolationInterface{&constraintViolation})
+	exception.AddViolations([]contract.ConstraintViolationInterface{factory.ConstraintViolationFactory(
+		regexConstraint,
+		value,
+	)})
 }

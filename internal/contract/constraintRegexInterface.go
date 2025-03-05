@@ -6,7 +6,6 @@ import (
 
 type ConstraintRegexInterface interface {
 	Pattern() regexp.Regexp
-	Message() string
 	ConstraintInterface
 }
 
