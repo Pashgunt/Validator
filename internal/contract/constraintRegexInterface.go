@@ -11,7 +11,7 @@ type ConstraintRegexInterface interface {
 
 type Validator interface {
 	Process(
-		regexConstraint ConstraintRegexInterface,
+		regexConstraint ConstraintInterface,
 		value interface{},
 		exception ValidationFailedExceptionInterface,
 	)

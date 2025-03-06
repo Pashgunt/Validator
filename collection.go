@@ -2,7 +2,7 @@ package validator
 
 import "github.com/Pashgunt/Validator/internal/contract"
 
-type AssertListValue []contract.ConstraintRegexInterface
+type AssertListValue []contract.ConstraintInterface
 type AssertList map[string]AssertListValue
 
 type CollectionAssertsInterface interface {

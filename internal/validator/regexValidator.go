@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/Pashgunt/Validator/internal/contract"
 	"github.com/Pashgunt/Validator/internal/factory"
+	"reflect"
 )
 
 type RegexValidator struct {
@@ -14,19 +15,20 @@ func NewRegexValidator() *RegexValidator {
 }
 
 func (v *RegexValidator) Process(
-	regexConstraint contract.ConstraintRegexInterface,
+	regexConstraint contract.ConstraintInterface,
 	value interface{},
 	exception contract.ValidationFailedExceptionInterface,
 ) {
-	pattern := regexConstraint.Pattern()
+	regexConstraintConverted := reflect.ValueOf(regexConstraint).Interface().(contract.ConstraintRegexInterface)
+	pattern := regexConstraintConverted.Pattern()
 
 	if pattern.MatchString(fmt.Sprintf("%v", value)) {
 		return
 	}
 
-	exception.AppendMessageGeneral(regexConstraint.Message())
+	exception.AppendMessageGeneral(regexConstraintConverted.Message())
 	exception.AddViolations([]contract.ConstraintViolationInterface{factory.ConstraintViolationFactory(
-		regexConstraint,
+		regexConstraintConverted,
 		value,
 	)})
 }
