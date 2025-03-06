@@ -13,7 +13,7 @@ func NewNotNilValidator() *NotNilValidator {
 }
 
 func (v *NotNilValidator) Process(
-	regexConstraint contract.ConstraintInterface,
+	constraint contract.ConstraintInterface,
 	value interface{},
 	exception contract.ValidationFailedExceptionInterface,
 ) {
@@ -21,9 +21,9 @@ func (v *NotNilValidator) Process(
 		return
 	}
 
-	exception.AppendMessageGeneral(regexConstraint.Message())
+	exception.AppendMessageGeneral(constraint.Message())
 	exception.AddViolations([]contract.ConstraintViolationInterface{factory.ConstraintViolationFactory(
-		regexConstraint,
+		constraint,
 		value,
 	)})
 }

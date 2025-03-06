@@ -14,7 +14,7 @@ func NewIsFalseValidator() *IsFalseValidator {
 }
 
 func (v *IsFalseValidator) Process(
-	regexConstraint contract.ConstraintInterface,
+	constraint contract.ConstraintInterface,
 	value interface{},
 	exception contract.ValidationFailedExceptionInterface,
 ) {
@@ -26,9 +26,9 @@ func (v *IsFalseValidator) Process(
 		return
 	}
 
-	exception.AppendMessageGeneral(regexConstraint.Message())
+	exception.AppendMessageGeneral(constraint.Message())
 	exception.AddViolations([]contract.ConstraintViolationInterface{factory.ConstraintViolationFactory(
-		regexConstraint,
+		constraint,
 		value,
 	)})
 }

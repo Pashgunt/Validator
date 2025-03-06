@@ -3,6 +3,7 @@ package validator
 import (
 	"github.com/Pashgunt/Validator/internal/contract"
 	validatorprocess "github.com/Pashgunt/Validator/internal/validator"
+	"reflect"
 	"regexp"
 )
 
@@ -138,7 +139,10 @@ func (n *BlankConstraint) ProcessValidators() []contract.Validator {
 
 func NewBlank(message string) *BlankConstraint {
 	blank := &BlankConstraint{message: message}
-	blank.processValidators = []contract.Validator{validatorprocess.NewBlankValidator()}
+	blank.processValidators = []contract.Validator{
+		validatorprocess.NewBlankValidator(),
+		validatorprocess.NewIsNilValidator(),
+	}
 
 	return blank
 }
@@ -183,4 +187,93 @@ func NewIsFalse(message string) *IsFalseConstraint {
 	isFalse.processValidators = []contract.Validator{validatorprocess.NewIsFalseValidator()}
 
 	return isFalse
+}
+
+type IsTrueConstraint struct {
+	message           string
+	propertyPath      string
+	root              string
+	processValidators []contract.Validator
+}
+
+func (n *IsTrueConstraint) Message() string {
+	return n.message
+}
+
+func (n *IsTrueConstraint) SetMessage(message string) {
+	n.message = message
+}
+
+func (n *IsTrueConstraint) PropertyPath() string {
+	return n.propertyPath
+}
+
+func (n *IsTrueConstraint) SetPropertyPath(propertyPath string) {
+	n.propertyPath = propertyPath
+}
+
+func (n *IsTrueConstraint) Root() string {
+	return n.root
+}
+
+func (n *IsTrueConstraint) SetRoot(root string) {
+	n.root = root
+}
+
+func (n *IsTrueConstraint) ProcessValidators() []contract.Validator {
+	return n.processValidators
+}
+
+func NewIsTrue(message string) *IsTrueConstraint {
+	isTrue := &IsTrueConstraint{message: message}
+	isTrue.processValidators = []contract.Validator{validatorprocess.NewIsTrueValidator()}
+
+	return isTrue
+}
+
+type IsTypeConstraint struct {
+	dataType          reflect.Kind
+	message           string
+	propertyPath      string
+	root              string
+	processValidators []contract.Validator
+}
+
+func (n *IsTypeConstraint) DataType() reflect.Kind {
+	return n.dataType
+}
+
+func (n *IsTypeConstraint) Message() string {
+	return n.message
+}
+
+func (n *IsTypeConstraint) SetMessage(message string) {
+	n.message = message
+}
+
+func (n *IsTypeConstraint) PropertyPath() string {
+	return n.propertyPath
+}
+
+func (n *IsTypeConstraint) SetPropertyPath(propertyPath string) {
+	n.propertyPath = propertyPath
+}
+
+func (n *IsTypeConstraint) Root() string {
+	return n.root
+}
+
+func (n *IsTypeConstraint) SetRoot(root string) {
+	n.root = root
+}
+
+func (n *IsTypeConstraint) ProcessValidators() []contract.Validator {
+	return n.processValidators
+}
+
+func NewIsType(dataType reflect.Kind, message string) *IsTypeConstraint {
+	isType := &IsTypeConstraint{dataType: dataType, message: message}
+	isType.processValidators = []contract.Validator{validatorprocess.NewIsTypeValidator()}
+
+	return isType
 }

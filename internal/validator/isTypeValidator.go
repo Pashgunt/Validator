@@ -3,27 +3,30 @@ package validatorprocess
 import (
 	"github.com/Pashgunt/Validator/internal/contract"
 	"github.com/Pashgunt/Validator/internal/factory"
+	"reflect"
 )
 
-type NotBlankValidator struct {
+type IsTypeValidator struct {
 }
 
-func NewNotBlankValidator() *NotBlankValidator {
-	return &NotBlankValidator{}
+func NewIsTypeValidator() *IsTypeValidator {
+	return &IsTypeValidator{}
 }
 
-func (v *NotBlankValidator) Process(
+func (v *IsTypeValidator) Process(
 	constraint contract.ConstraintInterface,
 	value interface{},
 	exception contract.ValidationFailedExceptionInterface,
 ) {
-	if value != "" {
+	constraintIsType := reflect.ValueOf(constraint).Interface().(contract.ConstraintIsTypeInterface)
+
+	if reflect.ValueOf(value).Kind() == constraintIsType.DataType() {
 		return
 	}
 
-	exception.AppendMessageGeneral(constraint.Message())
+	exception.AppendMessageGeneral(constraintIsType.Message())
 	exception.AddViolations([]contract.ConstraintViolationInterface{factory.ConstraintViolationFactory(
-		constraint,
+		constraintIsType,
 		value,
 	)})
 }

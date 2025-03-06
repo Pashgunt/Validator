@@ -5,19 +5,19 @@ import (
 	"github.com/Pashgunt/Validator/internal/factory"
 )
 
-type NotBlankValidator struct {
+type IsNilValidator struct {
 }
 
-func NewNotBlankValidator() *NotBlankValidator {
-	return &NotBlankValidator{}
+func NewIsNilValidator() *IsNilValidator {
+	return &IsNilValidator{}
 }
 
-func (v *NotBlankValidator) Process(
+func (v *IsNilValidator) Process(
 	constraint contract.ConstraintInterface,
 	value interface{},
 	exception contract.ValidationFailedExceptionInterface,
 ) {
-	if value != "" {
+	if value == nil {
 		return
 	}
 

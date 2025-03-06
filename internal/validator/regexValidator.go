@@ -15,11 +15,11 @@ func NewRegexValidator() *RegexValidator {
 }
 
 func (v *RegexValidator) Process(
-	regexConstraint contract.ConstraintInterface,
+	constraint contract.ConstraintInterface,
 	value interface{},
 	exception contract.ValidationFailedExceptionInterface,
 ) {
-	regexConstraintConverted := reflect.ValueOf(regexConstraint).Interface().(contract.ConstraintRegexInterface)
+	regexConstraintConverted := reflect.ValueOf(constraint).Interface().(contract.ConstraintRegexInterface)
 	pattern := regexConstraintConverted.Pattern()
 
 	if pattern.MatchString(fmt.Sprintf("%v", value)) {

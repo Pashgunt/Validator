@@ -13,7 +13,7 @@ func NewBlankValidator() *BlankValidator {
 }
 
 func (v *BlankValidator) Process(
-	regexConstraint contract.ConstraintInterface,
+	constraint contract.ConstraintInterface,
 	value interface{},
 	exception contract.ValidationFailedExceptionInterface,
 ) {
@@ -21,9 +21,9 @@ func (v *BlankValidator) Process(
 		return
 	}
 
-	exception.AppendMessageGeneral(regexConstraint.Message())
+	exception.AppendMessageGeneral(constraint.Message())
 	exception.AddViolations([]contract.ConstraintViolationInterface{factory.ConstraintViolationFactory(
-		regexConstraint,
+		constraint,
 		value,
 	)})
 }
