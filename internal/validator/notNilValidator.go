@@ -25,5 +25,6 @@ func (v *NotNilValidator) Process(
 	exception.AddViolations([]contract.ConstraintViolationInterface{factory.ConstraintViolationFactory(
 		constraint,
 		value,
+		"Message",
 	)})
 }

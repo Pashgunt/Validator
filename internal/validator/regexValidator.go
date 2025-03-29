@@ -30,5 +30,6 @@ func (v *RegexValidator) Process(
 	exception.AddViolations([]contract.ConstraintViolationInterface{factory.ConstraintViolationFactory(
 		regexConstraintConverted,
 		value,
+		"Message",
 	)})
 }

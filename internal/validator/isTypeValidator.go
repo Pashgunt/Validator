@@ -28,5 +28,6 @@ func (v *IsTypeValidator) Process(
 	exception.AddViolations([]contract.ConstraintViolationInterface{factory.ConstraintViolationFactory(
 		constraintIsType,
 		value,
+		"Message",
 	)})
 }

@@ -8,11 +8,9 @@ import (
 )
 
 type RegexConstraint struct {
-	pattern           *regexp.Regexp
-	message           string
-	propertyPath      string
-	root              string
-	processValidators []contract.Validator
+	pattern                     *regexp.Regexp
+	message, propertyPath, root string
+	processValidators           []contract.Validator
 }
 
 func (r *RegexConstraint) PropertyPath() string {
@@ -58,10 +56,8 @@ func NewRegex(
 }
 
 type NotBlankConstraint struct {
-	message           string
-	propertyPath      string
-	root              string
-	processValidators []contract.Validator
+	message, propertyPath, root string
+	processValidators           []contract.Validator
 }
 
 func (n *NotBlankConstraint) Message() string {
@@ -103,10 +99,8 @@ func NewNotBlank(message string) *NotBlankConstraint {
 }
 
 type BlankConstraint struct {
-	message           string
-	propertyPath      string
-	root              string
-	processValidators []contract.Validator
+	message, propertyPath, root string
+	processValidators           []contract.Validator
 }
 
 func (n *BlankConstraint) Message() string {
@@ -148,10 +142,8 @@ func NewBlank(message string) *BlankConstraint {
 }
 
 type IsFalseConstraint struct {
-	message           string
-	propertyPath      string
-	root              string
-	processValidators []contract.Validator
+	message, propertyPath, root string
+	processValidators           []contract.Validator
 }
 
 func (n *IsFalseConstraint) Message() string {
@@ -190,10 +182,8 @@ func NewIsFalse(message string) *IsFalseConstraint {
 }
 
 type IsTrueConstraint struct {
-	message           string
-	propertyPath      string
-	root              string
-	processValidators []contract.Validator
+	message, propertyPath, root string
+	processValidators           []contract.Validator
 }
 
 func (n *IsTrueConstraint) Message() string {
@@ -232,11 +222,9 @@ func NewIsTrue(message string) *IsTrueConstraint {
 }
 
 type IsTypeConstraint struct {
-	dataType          reflect.Kind
-	message           string
-	propertyPath      string
-	root              string
-	processValidators []contract.Validator
+	dataType                    reflect.Kind
+	message, propertyPath, root string
+	processValidators           []contract.Validator
 }
 
 func (n *IsTypeConstraint) DataType() reflect.Kind {
@@ -276,4 +264,57 @@ func NewIsType(dataType reflect.Kind, message string) *IsTypeConstraint {
 	isType.processValidators = []contract.Validator{validatorprocess.NewIsTypeValidator()}
 
 	return isType
+}
+
+type LengthConstraint struct {
+	min, max                                            int
+	minMessage, maxMessage, message, propertyPath, root string
+	processValidators                                   []contract.Validator
+}
+
+func NewLength(min int, max int, minMessage string, maxMessage string) *LengthConstraint {
+	length := &LengthConstraint{min: min, max: max, minMessage: minMessage, maxMessage: maxMessage}
+	length.processValidators = []contract.Validator{validatorprocess.NewLengthValidator()}
+
+	return length
+}
+
+func (l *LengthConstraint) Min() int {
+	return l.min
+}
+
+func (l *LengthConstraint) Max() int {
+	return l.max
+}
+
+func (l *LengthConstraint) MinMessage() string {
+	return l.minMessage
+}
+
+func (l *LengthConstraint) MaxMessage() string {
+	return l.maxMessage
+}
+
+func (l *LengthConstraint) Message() string {
+	return l.message
+}
+
+func (l *LengthConstraint) PropertyPath() string {
+	return l.propertyPath
+}
+
+func (l *LengthConstraint) SetPropertyPath(propertyPath string) {
+	l.propertyPath = propertyPath
+}
+
+func (l *LengthConstraint) Root() string {
+	return l.root
+}
+
+func (l *LengthConstraint) SetRoot(root string) {
+	l.root = root
+}
+
+func (l *LengthConstraint) ProcessValidators() []contract.Validator {
+	return l.processValidators
 }
