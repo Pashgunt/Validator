@@ -318,3 +318,44 @@ func (l *LengthConstraint) SetRoot(root string) {
 func (l *LengthConstraint) ProcessValidators() []contract.Validator {
 	return l.processValidators
 }
+
+type UrlConstraint struct {
+	message, propertyPath, root string
+	pattern                     *regexp.Regexp
+	processValidators           []contract.Validator
+}
+
+func (c *UrlConstraint) Pattern() regexp.Regexp {
+	return *c.pattern
+}
+
+func NewUrl(message string) *UrlConstraint {
+	url := &UrlConstraint{message: message, pattern: regexp.MustCompile(Email)}
+	url.processValidators = []contract.Validator{validatorprocess.NewRegexValidator()}
+
+	return url
+}
+
+func (c *UrlConstraint) Message() string {
+	return c.message
+}
+
+func (c *UrlConstraint) PropertyPath() string {
+	return c.propertyPath
+}
+
+func (c *UrlConstraint) SetPropertyPath(propertyPath string) {
+	c.propertyPath = propertyPath
+}
+
+func (c *UrlConstraint) Root() string {
+	return c.root
+}
+
+func (c *UrlConstraint) SetRoot(root string) {
+	c.root = root
+}
+
+func (c *UrlConstraint) ProcessValidators() []contract.Validator {
+	return c.processValidators
+}
