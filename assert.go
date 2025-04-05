@@ -226,3 +226,22 @@ func NewIp(message string) *IpConstraint {
 		RegexConstraint: *NewRegex(IPv4, message),
 	}
 }
+
+type PasswordStrengthConstraint struct {
+	minScore int
+	baseConstraint
+}
+
+func (p PasswordStrengthConstraint) MinScore() int {
+	return p.minScore
+}
+
+func NewPasswordStrength(message string, minSCore int) *PasswordStrengthConstraint {
+	return &PasswordStrengthConstraint{
+		minScore: minSCore,
+		baseConstraint: baseConstraint{
+			message:           message,
+			processValidators: []contract.Validator{validatorprocess.NewPasswordStrengthValidator()},
+		},
+	}
+}
