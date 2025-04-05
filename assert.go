@@ -282,3 +282,16 @@ func NewNotCompromisedPassword(message string) *NotCompromisedPasswordConstraint
 		},
 	}
 }
+
+type SpoofConstraint struct {
+	baseConstraint
+}
+
+func NewSpoof(message string) *SpoofConstraint {
+	return &SpoofConstraint{
+		baseConstraint: baseConstraint{
+			message:           message,
+			processValidators: []contract.Validator{validatorprocess.NewSpoofValidator()},
+		},
+	}
+}
