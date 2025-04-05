@@ -330,7 +330,7 @@ func (c *UrlConstraint) Pattern() regexp.Regexp {
 }
 
 func NewUrl(message string) *UrlConstraint {
-	url := &UrlConstraint{message: message, pattern: regexp.MustCompile(Email)}
+	url := &UrlConstraint{message: message, pattern: regexp.MustCompile(Url)}
 	url.processValidators = []contract.Validator{validatorprocess.NewRegexValidator()}
 
 	return url
@@ -357,5 +357,87 @@ func (c *UrlConstraint) SetRoot(root string) {
 }
 
 func (c *UrlConstraint) ProcessValidators() []contract.Validator {
+	return c.processValidators
+}
+
+type EmailConstraint struct {
+	message, propertyPath, root string
+	pattern                     *regexp.Regexp
+	processValidators           []contract.Validator
+}
+
+func (c *EmailConstraint) Pattern() regexp.Regexp {
+	return *c.pattern
+}
+
+func NewEmail(message string) *EmailConstraint {
+	email := &EmailConstraint{message: message, pattern: regexp.MustCompile(Email)}
+	email.processValidators = []contract.Validator{validatorprocess.NewRegexValidator()}
+
+	return email
+}
+
+func (c *EmailConstraint) Message() string {
+	return c.message
+}
+
+func (c *EmailConstraint) PropertyPath() string {
+	return c.propertyPath
+}
+
+func (c *EmailConstraint) SetPropertyPath(propertyPath string) {
+	c.propertyPath = propertyPath
+}
+
+func (c *EmailConstraint) Root() string {
+	return c.root
+}
+
+func (c *EmailConstraint) SetRoot(root string) {
+	c.root = root
+}
+
+func (c *EmailConstraint) ProcessValidators() []contract.Validator {
+	return c.processValidators
+}
+
+type MacAddressConstraint struct {
+	message, propertyPath, root string
+	pattern                     *regexp.Regexp
+	processValidators           []contract.Validator
+}
+
+func (c *MacAddressConstraint) Pattern() regexp.Regexp {
+	return *c.pattern
+}
+
+func NewMacAddress(message string) *MacAddressConstraint {
+	email := &MacAddressConstraint{message: message, pattern: regexp.MustCompile(MacAddress)}
+	email.processValidators = []contract.Validator{validatorprocess.NewRegexValidator()}
+
+	return email
+}
+
+func (c *MacAddressConstraint) Message() string {
+	return c.message
+}
+
+func (c *MacAddressConstraint) PropertyPath() string {
+	return c.propertyPath
+}
+
+func (c *MacAddressConstraint) SetPropertyPath(propertyPath string) {
+	c.propertyPath = propertyPath
+}
+
+func (c *MacAddressConstraint) Root() string {
+	return c.root
+}
+
+func (c *MacAddressConstraint) SetRoot(root string) {
+	c.root = root
+}
+
+func (c *MacAddressConstraint) ProcessValidators() []contract.Validator {
 	return c.processValidators
 }
