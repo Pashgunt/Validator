@@ -7,6 +7,32 @@ import (
 	"regexp"
 )
 
+type minBaseConstraint struct {
+	min        int
+	minMessage string
+}
+
+func (m minBaseConstraint) Min() int {
+	return m.min
+}
+
+func (m minBaseConstraint) MinMessage() string {
+	return m.minMessage
+}
+
+type maxBaseConstraint struct {
+	max        int
+	maxMessage string
+}
+
+func (m maxBaseConstraint) MaxMessage() string {
+	return m.maxMessage
+}
+
+func (m maxBaseConstraint) Max() int {
+	return m.max
+}
+
 type baseConstraint struct {
 	message, propertyPath, root string
 	processValidators           []contract.Validator
@@ -134,37 +160,19 @@ func NewIsType(dataType reflect.Kind, message string) *IsTypeConstraint {
 }
 
 type LengthConstraint struct {
-	min, max               int
-	minMessage, maxMessage string
+	minBaseConstraint
+	maxBaseConstraint
 	baseConstraint
 }
 
 func NewLength(min int, max int, minMessage string, maxMessage string) *LengthConstraint {
 	return &LengthConstraint{
-		min:        min,
-		max:        max,
-		minMessage: minMessage,
-		maxMessage: maxMessage,
+		minBaseConstraint: minBaseConstraint{min: min, minMessage: minMessage},
+		maxBaseConstraint: maxBaseConstraint{max: max, maxMessage: maxMessage},
 		baseConstraint: baseConstraint{
 			processValidators: []contract.Validator{validatorprocess.NewLengthValidator()},
 		},
 	}
-}
-
-func (l *LengthConstraint) Min() int {
-	return l.min
-}
-
-func (l *LengthConstraint) Max() int {
-	return l.max
-}
-
-func (l *LengthConstraint) MinMessage() string {
-	return l.minMessage
-}
-
-func (l *LengthConstraint) MaxMessage() string {
-	return l.maxMessage
 }
 
 type UrlConstraint struct {
@@ -242,6 +250,22 @@ func NewPasswordStrength(message string, minSCore int) *PasswordStrengthConstrai
 		baseConstraint: baseConstraint{
 			message:           message,
 			processValidators: []contract.Validator{validatorprocess.NewPasswordStrengthValidator()},
+		},
+	}
+}
+
+type WordCountConstraint struct {
+	minBaseConstraint
+	maxBaseConstraint
+	baseConstraint
+}
+
+func NewWordCount(min int, max int, minMessage string, maxMessage string) *WordCountConstraint {
+	return &WordCountConstraint{
+		minBaseConstraint: minBaseConstraint{min: min, minMessage: minMessage},
+		maxBaseConstraint: maxBaseConstraint{max: max, maxMessage: maxMessage},
+		baseConstraint: baseConstraint{
+			processValidators: []contract.Validator{validatorprocess.NewWordCountValidator()},
 		},
 	}
 }
