@@ -441,3 +441,126 @@ func (c *MacAddressConstraint) SetRoot(root string) {
 func (c *MacAddressConstraint) ProcessValidators() []contract.Validator {
 	return c.processValidators
 }
+
+type UuidConstraint struct {
+	message, propertyPath, root string
+	pattern                     *regexp.Regexp
+	processValidators           []contract.Validator
+}
+
+func (c *UuidConstraint) Pattern() regexp.Regexp {
+	return *c.pattern
+}
+
+func NewUuid(message string) *UuidConstraint {
+	uuid := &UuidConstraint{message: message, pattern: regexp.MustCompile(Uuid)}
+	uuid.processValidators = []contract.Validator{validatorprocess.NewRegexValidator()}
+
+	return uuid
+}
+
+func (c *UuidConstraint) Message() string {
+	return c.message
+}
+
+func (c *UuidConstraint) PropertyPath() string {
+	return c.propertyPath
+}
+
+func (c *UuidConstraint) SetPropertyPath(propertyPath string) {
+	c.propertyPath = propertyPath
+}
+
+func (c *UuidConstraint) Root() string {
+	return c.root
+}
+
+func (c *UuidConstraint) SetRoot(root string) {
+	c.root = root
+}
+
+func (c *UuidConstraint) ProcessValidators() []contract.Validator {
+	return c.processValidators
+}
+
+type HostnameConstraint struct {
+	message, propertyPath, root string
+	pattern                     *regexp.Regexp
+	processValidators           []contract.Validator
+}
+
+func (c *HostnameConstraint) Pattern() regexp.Regexp {
+	return *c.pattern
+}
+
+func NewHostname(message string) *HostnameConstraint {
+	hostname := &HostnameConstraint{message: message, pattern: regexp.MustCompile(Hostname)}
+	hostname.processValidators = []contract.Validator{validatorprocess.NewRegexValidator()}
+
+	return hostname
+}
+
+func (c *HostnameConstraint) Message() string {
+	return c.message
+}
+
+func (c *HostnameConstraint) PropertyPath() string {
+	return c.propertyPath
+}
+
+func (c *HostnameConstraint) SetPropertyPath(propertyPath string) {
+	c.propertyPath = propertyPath
+}
+
+func (c *HostnameConstraint) Root() string {
+	return c.root
+}
+
+func (c *HostnameConstraint) SetRoot(root string) {
+	c.root = root
+}
+
+func (c *HostnameConstraint) ProcessValidators() []contract.Validator {
+	return c.processValidators
+}
+
+type IpConstraint struct {
+	message, propertyPath, root string
+	pattern                     *regexp.Regexp
+	processValidators           []contract.Validator
+}
+
+func (c *IpConstraint) Pattern() regexp.Regexp {
+	return *c.pattern
+}
+
+func NewIp(message string) *IpConstraint {
+	ip := &IpConstraint{message: message, pattern: regexp.MustCompile(IPv4)}
+	ip.processValidators = []contract.Validator{validatorprocess.NewRegexValidator()}
+
+	return ip
+}
+
+func (c *IpConstraint) Message() string {
+	return c.message
+}
+
+func (c *IpConstraint) PropertyPath() string {
+	return c.propertyPath
+}
+
+func (c *IpConstraint) SetPropertyPath(propertyPath string) {
+	c.propertyPath = propertyPath
+}
+
+func (c *IpConstraint) Root() string {
+	return c.root
+}
+
+func (c *IpConstraint) SetRoot(root string) {
+	c.root = root
+}
+
+func (c *IpConstraint) ProcessValidators() []contract.Validator {
+	return c.processValidators
+}
