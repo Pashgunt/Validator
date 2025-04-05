@@ -1,6 +1,8 @@
 package string
 
 import (
+	"crypto/sha1"
+	"encoding/hex"
 	"math"
 	"unicode"
 )
@@ -67,4 +69,11 @@ func CalculateEntropy(data string) float64 {
 	}
 
 	return float64(len(data)) * math.Log2(float64(alphabetSize))
+}
+
+func HashPassword(password string) string {
+	h := sha1.New()
+	h.Write([]byte(password))
+
+	return hex.EncodeToString(h.Sum(nil))
 }

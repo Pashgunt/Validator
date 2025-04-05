@@ -269,3 +269,16 @@ func NewWordCount(min int, max int, minMessage string, maxMessage string) *WordC
 		},
 	}
 }
+
+type NotCompromisedPasswordConstraint struct {
+	baseConstraint
+}
+
+func NewNotCompromisedPassword(message string) *NotCompromisedPasswordConstraint {
+	return &NotCompromisedPasswordConstraint{
+		baseConstraint: baseConstraint{
+			message:           message,
+			processValidators: []contract.Validator{validatorprocess.NewCompromisedPasswordValidator()},
+		},
+	}
+}
