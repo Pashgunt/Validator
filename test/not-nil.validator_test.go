@@ -10,40 +10,40 @@ import (
 )
 
 const (
-	validatorNameBlank = "Blank"
+	validatorNameNotNil = "NotNil"
 )
 
-type blankArgs struct {
+type notNilArgs struct {
 	constraint contract.ConstraintInterface
 	value      interface{}
 	exception  contract.ValidationFailedExceptionInterface
 }
 
-func newBlankArgs(value interface{}) *blankArgs {
-	return &blankArgs{
+func newNotNilArgs(value interface{}) *notNilArgs {
+	return &notNilArgs{
 		value:      value,
 		constraint: validator.NewNotBlank(testhelper.DefaultErrorMessage),
 		exception:  &violation.ValidationFailedException{},
 	}
 }
 
-func TestBlankValidator(t *testing.T) {
+func TestNotNilValidator(t *testing.T) {
 	tests := []struct {
 		name string
-		blankArgs
+		notNilArgs
 		resultValidator testhelper.ResultValidator
 	}{
 		{
-			name:      "test isset error message " + validatorNameBlank + " validator",
-			blankArgs: *newBlankArgs("Value"),
+			name:       "test isset error message " + validatorNameNotNil + " validator",
+			notNilArgs: *newNotNilArgs(nil),
 			resultValidator: *testhelper.NewResultValidator(
 				testhelper.DefaultIssetErrorCount,
 				testhelper.DefaultErrorMessage,
 			),
 		},
 		{
-			name:      "test blank error message " + validatorNameBlank + " validator",
-			blankArgs: *newBlankArgs(testhelper.BlankString),
+			name:       "test blank error message " + validatorNameNotNil + " validator",
+			notNilArgs: *newNotNilArgs("str"),
 			resultValidator: *testhelper.NewResultValidator(
 				testhelper.DefaultNotIssetErrorCount,
 				testhelper.BlankString,
@@ -53,15 +53,15 @@ func TestBlankValidator(t *testing.T) {
 
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
-			(&validatorprocess.BlankValidator{}).Process(
-				test.blankArgs.constraint,
-				test.blankArgs.value,
-				test.blankArgs.exception,
+			(&validatorprocess.NotNilValidator{}).Process(
+				test.notNilArgs.constraint,
+				test.notNilArgs.value,
+				test.notNilArgs.exception,
 			)
 
 			if len(test.exception.Violations()) != test.resultValidator.Count() {
 				t.Errorf(
-					validatorNameBlank+" error count exceptions %v, want %v",
+					validatorNameNotNil+" error count exceptions %v, want %v",
 					len(test.exception.Violations()),
 					test.resultValidator.Count(),
 				)
@@ -73,7 +73,7 @@ func TestBlankValidator(t *testing.T) {
 				}
 
 				t.Errorf(
-					validatorNameBlank+" error message exceptions %v, want %v",
+					validatorNameNotNil+" error message exceptions %v, want %v",
 					viol.Message().Message(),
 					test.resultValidator.Message(),
 				)

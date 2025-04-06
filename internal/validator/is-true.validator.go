@@ -22,7 +22,7 @@ func (v *IsTrueValidator) Process(
 		return
 	}
 
-	if value == false {
+	if value == true {
 		return
 	}
 

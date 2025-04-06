@@ -10,40 +10,40 @@ import (
 )
 
 const (
-	validatorNameBlank = "Blank"
+	validatorNameSpoof = "Spoof"
 )
 
-type blankArgs struct {
+type spoofArgs struct {
 	constraint contract.ConstraintInterface
 	value      interface{}
 	exception  contract.ValidationFailedExceptionInterface
 }
 
-func newBlankArgs(value interface{}) *blankArgs {
-	return &blankArgs{
+func newSpoofArgs(value interface{}) *spoofArgs {
+	return &spoofArgs{
 		value:      value,
 		constraint: validator.NewNotBlank(testhelper.DefaultErrorMessage),
 		exception:  &violation.ValidationFailedException{},
 	}
 }
 
-func TestBlankValidator(t *testing.T) {
+func TestSpoofValidator(t *testing.T) {
 	tests := []struct {
 		name string
-		blankArgs
+		spoofArgs
 		resultValidator testhelper.ResultValidator
 	}{
 		{
-			name:      "test isset error message " + validatorNameBlank + " validator",
-			blankArgs: *newBlankArgs("Value"),
+			name:      "test isset error message " + validatorNameSpoof + " validator",
+			spoofArgs: *newSpoofArgs("Hello\xA0World"),
 			resultValidator: *testhelper.NewResultValidator(
 				testhelper.DefaultIssetErrorCount,
 				testhelper.DefaultErrorMessage,
 			),
 		},
 		{
-			name:      "test blank error message " + validatorNameBlank + " validator",
-			blankArgs: *newBlankArgs(testhelper.BlankString),
+			name:      "test blank error message " + validatorNameSpoof + " validator",
+			spoofArgs: *newSpoofArgs("Hello World"),
 			resultValidator: *testhelper.NewResultValidator(
 				testhelper.DefaultNotIssetErrorCount,
 				testhelper.BlankString,
@@ -53,15 +53,15 @@ func TestBlankValidator(t *testing.T) {
 
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
-			(&validatorprocess.BlankValidator{}).Process(
-				test.blankArgs.constraint,
-				test.blankArgs.value,
-				test.blankArgs.exception,
+			(&validatorprocess.SpoofValidator{}).Process(
+				test.spoofArgs.constraint,
+				test.spoofArgs.value,
+				test.spoofArgs.exception,
 			)
 
 			if len(test.exception.Violations()) != test.resultValidator.Count() {
 				t.Errorf(
-					validatorNameBlank+" error count exceptions %v, want %v",
+					validatorNameSpoof+" error count exceptions %v, want %v",
 					len(test.exception.Violations()),
 					test.resultValidator.Count(),
 				)
@@ -73,7 +73,7 @@ func TestBlankValidator(t *testing.T) {
 				}
 
 				t.Errorf(
-					validatorNameBlank+" error message exceptions %v, want %v",
+					validatorNameSpoof+" error message exceptions %v, want %v",
 					viol.Message().Message(),
 					test.resultValidator.Message(),
 				)

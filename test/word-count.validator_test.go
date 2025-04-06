@@ -10,40 +10,52 @@ import (
 )
 
 const (
-	validatorNameBlank = "Blank"
+	validatorNameWordCount = "WordCount"
 )
 
-type blankArgs struct {
+type wordCountArgs struct {
 	constraint contract.ConstraintInterface
 	value      interface{}
 	exception  contract.ValidationFailedExceptionInterface
 }
 
-func newBlankArgs(value interface{}) *blankArgs {
-	return &blankArgs{
+func newWordCountArgs(value interface{}, min int, max int, minMessage string, maxMessage string) *wordCountArgs {
+	return &wordCountArgs{
 		value:      value,
-		constraint: validator.NewNotBlank(testhelper.DefaultErrorMessage),
+		constraint: validator.NewWordCount(min, max, minMessage, maxMessage),
 		exception:  &violation.ValidationFailedException{},
 	}
 }
 
-func TestBlankValidator(t *testing.T) {
+func TestWordCountValidator(t *testing.T) {
 	tests := []struct {
 		name string
-		blankArgs
+		wordCountArgs
 		resultValidator testhelper.ResultValidator
 	}{
 		{
-			name:      "test isset error message " + validatorNameBlank + " validator",
-			blankArgs: *newBlankArgs("Value"),
+			name: "test isset error message " + validatorNameWordCount + " validator",
+			wordCountArgs: *newWordCountArgs(
+				"str",
+				5,
+				10,
+				testhelper.DefaultErrorMessage,
+				testhelper.DefaultErrorMessage,
+			),
 			resultValidator: *testhelper.NewResultValidator(
 				testhelper.DefaultIssetErrorCount,
 				testhelper.DefaultErrorMessage,
 			),
 		},
 		{
-			name:      "test blank error message " + validatorNameBlank + " validator",
-			blankArgs: *newBlankArgs(testhelper.BlankString),
+			name: "test blank error message " + validatorNameWordCount + " validator",
+			wordCountArgs: *newWordCountArgs(
+				"string str2 str3",
+				0,
+				10,
+				testhelper.DefaultErrorMessage,
+				testhelper.DefaultErrorMessage,
+			),
 			resultValidator: *testhelper.NewResultValidator(
 				testhelper.DefaultNotIssetErrorCount,
 				testhelper.BlankString,
@@ -53,15 +65,15 @@ func TestBlankValidator(t *testing.T) {
 
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
-			(&validatorprocess.BlankValidator{}).Process(
-				test.blankArgs.constraint,
-				test.blankArgs.value,
-				test.blankArgs.exception,
+			(&validatorprocess.WordCountValidator{}).Process(
+				test.wordCountArgs.constraint,
+				test.wordCountArgs.value,
+				test.wordCountArgs.exception,
 			)
 
 			if len(test.exception.Violations()) != test.resultValidator.Count() {
 				t.Errorf(
-					validatorNameBlank+" error count exceptions %v, want %v",
+					validatorNameWordCount+" error count exceptions %v, want %v",
 					len(test.exception.Violations()),
 					test.resultValidator.Count(),
 				)
@@ -73,7 +85,7 @@ func TestBlankValidator(t *testing.T) {
 				}
 
 				t.Errorf(
-					validatorNameBlank+" error message exceptions %v, want %v",
+					validatorNameWordCount+" error message exceptions %v, want %v",
 					viol.Message().Message(),
 					test.resultValidator.Message(),
 				)

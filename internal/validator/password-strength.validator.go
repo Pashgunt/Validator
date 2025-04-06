@@ -13,14 +13,7 @@ type PasswordStrengthValidator struct {
 }
 
 func NewPasswordStrengthValidator() *PasswordStrengthValidator {
-	return &PasswordStrengthValidator{
-		assocStrength: map[int]float64{
-			strength.Weak:       20,
-			strength.Medium:     40,
-			strength.Strong:     60,
-			strength.VeryStrong: 80,
-		},
-	}
+	return &PasswordStrengthValidator{}
 }
 
 func (v *PasswordStrengthValidator) Process(
@@ -28,6 +21,13 @@ func (v *PasswordStrengthValidator) Process(
 	value interface{},
 	exception contract.ValidationFailedExceptionInterface,
 ) {
+	v.assocStrength = map[int]float64{
+		strength.Weak:       20,
+		strength.Medium:     40,
+		strength.Strong:     60,
+		strength.VeryStrong: 80,
+	}
+
 	passwordStrengthConstraint := reflect.ValueOf(constraint).Interface().(contract.PasswordStrengthInterface)
 
 	if stringhelper.CalculateEntropy(value.(string)) >= v.assocStrength[passwordStrengthConstraint.MinScore()] {

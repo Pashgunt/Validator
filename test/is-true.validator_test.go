@@ -10,40 +10,48 @@ import (
 )
 
 const (
-	validatorNameBlank = "Blank"
+	validatorNameIsTrue = "IsTrue"
 )
 
-type blankArgs struct {
+type isTrueArgs struct {
 	constraint contract.ConstraintInterface
 	value      interface{}
 	exception  contract.ValidationFailedExceptionInterface
 }
 
-func newBlankArgs(value interface{}) *blankArgs {
-	return &blankArgs{
+func newIsTrueArgs(value interface{}) *isTrueArgs {
+	return &isTrueArgs{
 		value:      value,
-		constraint: validator.NewNotBlank(testhelper.DefaultErrorMessage),
+		constraint: validator.NewIsTrue(testhelper.DefaultErrorMessage),
 		exception:  &violation.ValidationFailedException{},
 	}
 }
 
-func TestBlankValidator(t *testing.T) {
+func TestIsTrueValidator(t *testing.T) {
 	tests := []struct {
 		name string
-		blankArgs
+		isTrueArgs
 		resultValidator testhelper.ResultValidator
 	}{
 		{
-			name:      "test isset error message " + validatorNameBlank + " validator",
-			blankArgs: *newBlankArgs("Value"),
+			name:       "test isset error message " + validatorNameIsTrue + " validator",
+			isTrueArgs: *newIsTrueArgs(false),
 			resultValidator: *testhelper.NewResultValidator(
 				testhelper.DefaultIssetErrorCount,
 				testhelper.DefaultErrorMessage,
 			),
 		},
 		{
-			name:      "test blank error message " + validatorNameBlank + " validator",
-			blankArgs: *newBlankArgs(testhelper.BlankString),
+			name:       "test blank error message " + validatorNameIsTrue + " validator",
+			isTrueArgs: *newIsTrueArgs(true),
+			resultValidator: *testhelper.NewResultValidator(
+				testhelper.DefaultNotIssetErrorCount,
+				testhelper.BlankString,
+			),
+		},
+		{
+			name:       "test blank error message " + validatorNameIsTrue + " validator with not bool data type",
+			isTrueArgs: *newIsTrueArgs("str"),
 			resultValidator: *testhelper.NewResultValidator(
 				testhelper.DefaultNotIssetErrorCount,
 				testhelper.BlankString,
@@ -53,15 +61,15 @@ func TestBlankValidator(t *testing.T) {
 
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
-			(&validatorprocess.BlankValidator{}).Process(
-				test.blankArgs.constraint,
-				test.blankArgs.value,
-				test.blankArgs.exception,
+			(&validatorprocess.IsTrueValidator{}).Process(
+				test.isTrueArgs.constraint,
+				test.isTrueArgs.value,
+				test.isTrueArgs.exception,
 			)
 
 			if len(test.exception.Violations()) != test.resultValidator.Count() {
 				t.Errorf(
-					validatorNameBlank+" error count exceptions %v, want %v",
+					validatorNameIsTrue+" error count exceptions %v, want %v",
 					len(test.exception.Violations()),
 					test.resultValidator.Count(),
 				)
@@ -73,7 +81,7 @@ func TestBlankValidator(t *testing.T) {
 				}
 
 				t.Errorf(
-					validatorNameBlank+" error message exceptions %v, want %v",
+					validatorNameIsTrue+" error message exceptions %v, want %v",
 					viol.Message().Message(),
 					test.resultValidator.Message(),
 				)

@@ -244,9 +244,9 @@ func (p PasswordStrengthConstraint) MinScore() int {
 	return p.minScore
 }
 
-func NewPasswordStrength(message string, minSCore int) *PasswordStrengthConstraint {
+func NewPasswordStrength(message string, minScore int) *PasswordStrengthConstraint {
 	return &PasswordStrengthConstraint{
-		minScore: minSCore,
+		minScore: minScore,
 		baseConstraint: baseConstraint{
 			message:           message,
 			processValidators: []contract.Validator{validatorprocess.NewPasswordStrengthValidator()},

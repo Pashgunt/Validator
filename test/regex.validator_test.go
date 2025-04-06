@@ -10,40 +10,40 @@ import (
 )
 
 const (
-	validatorNameBlank = "Blank"
+	validatorNameRegex = "Regex"
 )
 
-type blankArgs struct {
+type regexArgs struct {
 	constraint contract.ConstraintInterface
 	value      interface{}
 	exception  contract.ValidationFailedExceptionInterface
 }
 
-func newBlankArgs(value interface{}) *blankArgs {
-	return &blankArgs{
+func newRegexArgs(value interface{}, pattern string) *regexArgs {
+	return &regexArgs{
 		value:      value,
-		constraint: validator.NewNotBlank(testhelper.DefaultErrorMessage),
+		constraint: validator.NewRegex(pattern, testhelper.DefaultErrorMessage),
 		exception:  &violation.ValidationFailedException{},
 	}
 }
 
-func TestBlankValidator(t *testing.T) {
+func TestRegexValidator(t *testing.T) {
 	tests := []struct {
 		name string
-		blankArgs
+		regexArgs
 		resultValidator testhelper.ResultValidator
 	}{
 		{
-			name:      "test isset error message " + validatorNameBlank + " validator",
-			blankArgs: *newBlankArgs("Value"),
+			name:      "test isset error message " + validatorNameRegex + " validator",
+			regexArgs: *newRegexArgs("", `[a-zA-Z]`),
 			resultValidator: *testhelper.NewResultValidator(
 				testhelper.DefaultIssetErrorCount,
 				testhelper.DefaultErrorMessage,
 			),
 		},
 		{
-			name:      "test blank error message " + validatorNameBlank + " validator",
-			blankArgs: *newBlankArgs(testhelper.BlankString),
+			name:      "test blank error message " + validatorNameRegex + " validator",
+			regexArgs: *newRegexArgs("Value", `[a-zA-Z]`),
 			resultValidator: *testhelper.NewResultValidator(
 				testhelper.DefaultNotIssetErrorCount,
 				testhelper.BlankString,
@@ -53,15 +53,15 @@ func TestBlankValidator(t *testing.T) {
 
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
-			(&validatorprocess.BlankValidator{}).Process(
-				test.blankArgs.constraint,
-				test.blankArgs.value,
-				test.blankArgs.exception,
+			(&validatorprocess.RegexValidator{}).Process(
+				test.regexArgs.constraint,
+				test.regexArgs.value,
+				test.regexArgs.exception,
 			)
 
 			if len(test.exception.Violations()) != test.resultValidator.Count() {
 				t.Errorf(
-					validatorNameBlank+" error count exceptions %v, want %v",
+					validatorNameRegex+" error count exceptions %v, want %v",
 					len(test.exception.Violations()),
 					test.resultValidator.Count(),
 				)
@@ -73,7 +73,7 @@ func TestBlankValidator(t *testing.T) {
 				}
 
 				t.Errorf(
-					validatorNameBlank+" error message exceptions %v, want %v",
+					validatorNameRegex+" error message exceptions %v, want %v",
 					viol.Message().Message(),
 					test.resultValidator.Message(),
 				)

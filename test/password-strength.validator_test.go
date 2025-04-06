@@ -5,45 +5,46 @@ import (
 	"github.com/Pashgunt/Validator/internal/contract"
 	"github.com/Pashgunt/Validator/internal/validator"
 	"github.com/Pashgunt/Validator/internal/violation"
+	"github.com/Pashgunt/Validator/strength"
 	testhelper "github.com/Pashgunt/Validator/test/helper"
 	"testing"
 )
 
 const (
-	validatorNameBlank = "Blank"
+	validatorNamePasswordStrength = "PasswordStrength"
 )
 
-type blankArgs struct {
+type PasswordStrengthArgs struct {
 	constraint contract.ConstraintInterface
 	value      interface{}
 	exception  contract.ValidationFailedExceptionInterface
 }
 
-func newBlankArgs(value interface{}) *blankArgs {
-	return &blankArgs{
+func newPasswordStrengthArgs(value interface{}, minScore int) *PasswordStrengthArgs {
+	return &PasswordStrengthArgs{
 		value:      value,
-		constraint: validator.NewNotBlank(testhelper.DefaultErrorMessage),
+		constraint: validator.NewPasswordStrength(testhelper.DefaultErrorMessage, minScore),
 		exception:  &violation.ValidationFailedException{},
 	}
 }
 
-func TestBlankValidator(t *testing.T) {
+func TestPasswordStrengthValidator(t *testing.T) {
 	tests := []struct {
 		name string
-		blankArgs
+		PasswordStrengthArgs
 		resultValidator testhelper.ResultValidator
 	}{
 		{
-			name:      "test isset error message " + validatorNameBlank + " validator",
-			blankArgs: *newBlankArgs("Value"),
+			name:                 "test isset error message " + validatorNamePasswordStrength + " validator",
+			PasswordStrengthArgs: *newPasswordStrengthArgs("test", strength.Strong),
 			resultValidator: *testhelper.NewResultValidator(
 				testhelper.DefaultIssetErrorCount,
 				testhelper.DefaultErrorMessage,
 			),
 		},
 		{
-			name:      "test blank error message " + validatorNameBlank + " validator",
-			blankArgs: *newBlankArgs(testhelper.BlankString),
+			name:                 "test blank error message " + validatorNamePasswordStrength + " validator",
+			PasswordStrengthArgs: *newPasswordStrengthArgs("The_Error12", strength.Strong),
 			resultValidator: *testhelper.NewResultValidator(
 				testhelper.DefaultNotIssetErrorCount,
 				testhelper.BlankString,
@@ -53,15 +54,15 @@ func TestBlankValidator(t *testing.T) {
 
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
-			(&validatorprocess.BlankValidator{}).Process(
-				test.blankArgs.constraint,
-				test.blankArgs.value,
-				test.blankArgs.exception,
+			(&validatorprocess.PasswordStrengthValidator{}).Process(
+				test.PasswordStrengthArgs.constraint,
+				test.PasswordStrengthArgs.value,
+				test.PasswordStrengthArgs.exception,
 			)
 
 			if len(test.exception.Violations()) != test.resultValidator.Count() {
 				t.Errorf(
-					validatorNameBlank+" error count exceptions %v, want %v",
+					validatorNamePasswordStrength+" error count exceptions %v, want %v",
 					len(test.exception.Violations()),
 					test.resultValidator.Count(),
 				)
@@ -73,7 +74,7 @@ func TestBlankValidator(t *testing.T) {
 				}
 
 				t.Errorf(
-					validatorNameBlank+" error message exceptions %v, want %v",
+					validatorNamePasswordStrength+" error message exceptions %v, want %v",
 					viol.Message().Message(),
 					test.resultValidator.Message(),
 				)
