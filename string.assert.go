@@ -177,12 +177,12 @@ func (u UserPasswordConstraint) PasswordHasher() pkg.PasswordHasherInterface {
 	return u.passwordHasherInterface
 }
 
-func NewUserPassword(message string, hasherInterface pkg.PasswordHasherInterface) *UserPasswordConstraint {
+func NewUserPassword(message string, passwordHasher pkg.PasswordHasherInterface) *UserPasswordConstraint {
 	return &UserPasswordConstraint{
 		baseConstraint: baseConstraint{
 			message:           message,
 			processValidators: []contract.Validator{},
 		},
-		passwordHasherInterface: hasherInterface,
+		passwordHasherInterface: passwordHasher,
 	}
 }
