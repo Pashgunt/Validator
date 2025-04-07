@@ -4,7 +4,7 @@ import (
 	"github.com/Pashgunt/Validator/internal/contract"
 	"github.com/Pashgunt/Validator/internal/factory"
 	stringhelper "github.com/Pashgunt/Validator/internal/helper/string"
-	"github.com/Pashgunt/Validator/strength"
+	"github.com/Pashgunt/Validator/pkg"
 	"reflect"
 )
 
@@ -22,10 +22,10 @@ func (v *PasswordStrengthValidator) Process(
 	exception contract.ValidationFailedExceptionInterface,
 ) {
 	v.assocStrength = map[int]float64{
-		strength.Weak:       20,
-		strength.Medium:     40,
-		strength.Strong:     60,
-		strength.VeryStrong: 80,
+		pkg.Weak:       20,
+		pkg.Medium:     40,
+		pkg.Strong:     60,
+		pkg.VeryStrong: 80,
 	}
 
 	passwordStrengthConstraint := reflect.ValueOf(constraint).Interface().(contract.PasswordStrengthInterface)

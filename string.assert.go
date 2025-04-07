@@ -3,6 +3,7 @@ package validator
 import (
 	"github.com/Pashgunt/Validator/internal/contract"
 	validatorprocess "github.com/Pashgunt/Validator/internal/validator"
+	"github.com/Pashgunt/Validator/pkg"
 	"regexp"
 )
 
@@ -164,5 +165,24 @@ func NewSpoof(message string) *SpoofConstraint {
 			message:           message,
 			processValidators: []contract.Validator{validatorprocess.NewSpoofValidator()},
 		},
+	}
+}
+
+type UserPasswordConstraint struct {
+	baseConstraint
+	passwordHasherInterface pkg.PasswordHasherInterface
+}
+
+func (u UserPasswordConstraint) PasswordHasher() pkg.PasswordHasherInterface {
+	return u.passwordHasherInterface
+}
+
+func NewUserPassword(message string, hasherInterface pkg.PasswordHasherInterface) *UserPasswordConstraint {
+	return &UserPasswordConstraint{
+		baseConstraint: baseConstraint{
+			message:           message,
+			processValidators: []contract.Validator{},
+		},
+		passwordHasherInterface: hasherInterface,
 	}
 }

@@ -1,4 +1,4 @@
-package strength
+package pkg
 
 const (
 	Weak = iota + 1

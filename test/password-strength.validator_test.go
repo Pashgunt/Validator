@@ -5,7 +5,7 @@ import (
 	"github.com/Pashgunt/Validator/internal/contract"
 	"github.com/Pashgunt/Validator/internal/validator"
 	"github.com/Pashgunt/Validator/internal/violation"
-	"github.com/Pashgunt/Validator/strength"
+	"github.com/Pashgunt/Validator/pkg"
 	testhelper "github.com/Pashgunt/Validator/test/helper"
 	"testing"
 )
@@ -36,7 +36,7 @@ func TestPasswordStrengthValidator(t *testing.T) {
 	}{
 		{
 			name:                 "test isset error message " + validatorNamePasswordStrength + " validator",
-			PasswordStrengthArgs: *newPasswordStrengthArgs("test", strength.Strong),
+			PasswordStrengthArgs: *newPasswordStrengthArgs("test", pkg.Strong),
 			resultValidator: *testhelper.NewResultValidator(
 				testhelper.DefaultIssetErrorCount,
 				testhelper.DefaultErrorMessage,
@@ -44,7 +44,7 @@ func TestPasswordStrengthValidator(t *testing.T) {
 		},
 		{
 			name:                 "test blank error message " + validatorNamePasswordStrength + " validator",
-			PasswordStrengthArgs: *newPasswordStrengthArgs("The_Error12", strength.Strong),
+			PasswordStrengthArgs: *newPasswordStrengthArgs("The_Error12", pkg.Strong),
 			resultValidator: *testhelper.NewResultValidator(
 				testhelper.DefaultNotIssetErrorCount,
 				testhelper.BlankString,
