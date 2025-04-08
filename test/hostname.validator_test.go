@@ -5,6 +5,7 @@ import (
 	"github.com/Pashgunt/Validator/internal/contract"
 	"github.com/Pashgunt/Validator/internal/validator"
 	"github.com/Pashgunt/Validator/internal/violation"
+	"github.com/Pashgunt/Validator/pkg"
 	testhelper "github.com/Pashgunt/Validator/test/helper"
 	"testing"
 )
@@ -22,7 +23,7 @@ type hostnameArgs struct {
 func newHostnameArgs(value interface{}) *hostnameArgs {
 	return &hostnameArgs{
 		value:      value,
-		constraint: validator.NewRegex(validator.Hostname, testhelper.DefaultErrorMessage),
+		constraint: validator.NewRegex(pkg.Hostname, testhelper.DefaultErrorMessage),
 		exception:  &violation.ValidationFailedException{},
 	}
 }

@@ -5,6 +5,7 @@ import (
 	"github.com/Pashgunt/Validator/internal/contract"
 	"github.com/Pashgunt/Validator/internal/validator"
 	"github.com/Pashgunt/Validator/internal/violation"
+	"github.com/Pashgunt/Validator/pkg"
 	testhelper "github.com/Pashgunt/Validator/test/helper"
 	"testing"
 )
@@ -22,7 +23,7 @@ type urlArgs struct {
 func newUrlArgs(value interface{}) *urlArgs {
 	return &urlArgs{
 		value:      value,
-		constraint: validator.NewRegex(validator.Url, testhelper.DefaultErrorMessage),
+		constraint: validator.NewRegex(pkg.Url, testhelper.DefaultErrorMessage),
 		exception:  &violation.ValidationFailedException{},
 	}
 }

@@ -5,6 +5,7 @@ import (
 	"github.com/Pashgunt/Validator/internal/contract"
 	"github.com/Pashgunt/Validator/internal/validator"
 	"github.com/Pashgunt/Validator/internal/violation"
+	"github.com/Pashgunt/Validator/pkg"
 	testhelper "github.com/Pashgunt/Validator/test/helper"
 	"testing"
 )
@@ -22,7 +23,7 @@ type ipArgs struct {
 func newIpArgs(value interface{}) *ipArgs {
 	return &ipArgs{
 		value:      value,
-		constraint: validator.NewRegex(validator.IPv4, testhelper.DefaultErrorMessage),
+		constraint: validator.NewRegex(pkg.IPv4, testhelper.DefaultErrorMessage),
 		exception:  &violation.ValidationFailedException{},
 	}
 }

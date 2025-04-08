@@ -53,7 +53,7 @@ type UrlConstraint struct {
 
 func NewUrl(message string) *UrlConstraint {
 	return &UrlConstraint{
-		RegexConstraint: *NewRegex(Url, message),
+		RegexConstraint: *NewRegex(pkg.Url, message),
 	}
 }
 
@@ -63,7 +63,7 @@ type EmailConstraint struct {
 
 func NewEmail(message string) *EmailConstraint {
 	return &EmailConstraint{
-		RegexConstraint: *NewRegex(Email, message),
+		RegexConstraint: *NewRegex(pkg.Email, message),
 	}
 }
 
@@ -73,7 +73,7 @@ type MacAddressConstraint struct {
 
 func NewMacAddress(message string) *MacAddressConstraint {
 	return &MacAddressConstraint{
-		RegexConstraint: *NewRegex(MacAddress, message),
+		RegexConstraint: *NewRegex(pkg.MacAddress, message),
 	}
 }
 
@@ -83,7 +83,7 @@ type UuidConstraint struct {
 
 func NewUuid(message string) *UuidConstraint {
 	return &UuidConstraint{
-		RegexConstraint: *NewRegex(Uuid, message),
+		RegexConstraint: *NewRegex(pkg.Uuid, message),
 	}
 }
 
@@ -93,7 +93,7 @@ type HostnameConstraint struct {
 
 func NewHostname(message string) *HostnameConstraint {
 	return &HostnameConstraint{
-		RegexConstraint: *NewRegex(Hostname, message),
+		RegexConstraint: *NewRegex(pkg.Hostname, message),
 	}
 }
 
@@ -103,7 +103,7 @@ type IpConstraint struct {
 
 func NewIp(message string) *IpConstraint {
 	return &IpConstraint{
-		RegexConstraint: *NewRegex(IPv4, message),
+		RegexConstraint: *NewRegex(pkg.IPv4, message),
 	}
 }
 

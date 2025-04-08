@@ -5,6 +5,7 @@ import (
 	"github.com/Pashgunt/Validator/internal/contract"
 	"github.com/Pashgunt/Validator/internal/validator"
 	"github.com/Pashgunt/Validator/internal/violation"
+	"github.com/Pashgunt/Validator/pkg"
 	testhelper "github.com/Pashgunt/Validator/test/helper"
 	"github.com/google/uuid"
 	"testing"
@@ -23,7 +24,7 @@ type uuidArgs struct {
 func newUuidArgs(value interface{}) *uuidArgs {
 	return &uuidArgs{
 		value:      value,
-		constraint: validator.NewRegex(validator.Uuid, testhelper.DefaultErrorMessage),
+		constraint: validator.NewRegex(pkg.Uuid, testhelper.DefaultErrorMessage),
 		exception:  &violation.ValidationFailedException{},
 	}
 }

@@ -9,7 +9,7 @@ import (
 type LengthValidator struct {
 	lengthConstraintConverted contract.ConstraintLengthInterface
 	exception                 contract.ValidationFailedExceptionInterface
-	value                     interface{}
+	value                     string
 }
 
 func NewLengthValidator() *LengthValidator {
@@ -23,13 +23,13 @@ func (l *LengthValidator) Process(
 ) {
 	l.lengthConstraintConverted = reflect.ValueOf(constraint).Interface().(contract.ConstraintLengthInterface)
 	l.exception = exception
-	l.value = value
+	l.value = value.(string)
 
-	if len(l.value.(string)) < l.lengthConstraintConverted.Min() {
+	if len(l.value) < l.lengthConstraintConverted.Min() {
 		l.processMessage(l.lengthConstraintConverted.MinMessage(), "MinMessage")
 	}
 
-	if len(l.value.(string)) > l.lengthConstraintConverted.Max() {
+	if len(l.value) > l.lengthConstraintConverted.Max() {
 		l.processMessage(l.lengthConstraintConverted.MaxMessage(), "MaxMessage")
 	}
 }

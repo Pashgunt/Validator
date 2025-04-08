@@ -5,6 +5,7 @@ import (
 	"github.com/Pashgunt/Validator/internal/contract"
 	"github.com/Pashgunt/Validator/internal/validator"
 	"github.com/Pashgunt/Validator/internal/violation"
+	"github.com/Pashgunt/Validator/pkg"
 	testhelper "github.com/Pashgunt/Validator/test/helper"
 	"testing"
 )
@@ -22,7 +23,7 @@ type emailArgs struct {
 func newEmailArgs(value interface{}) *emailArgs {
 	return &emailArgs{
 		value:      value,
-		constraint: validator.NewRegex(validator.Email, testhelper.DefaultErrorMessage),
+		constraint: validator.NewRegex(pkg.Email, testhelper.DefaultErrorMessage),
 		exception:  &violation.ValidationFailedException{},
 	}
 }
