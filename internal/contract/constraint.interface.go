@@ -11,6 +11,7 @@ type ConstraintMainDataInterface interface {
 	Root() string
 	SetRoot(root string)
 	Message() string
+	SetMessage(message string)
 }
 
 type Validator interface {

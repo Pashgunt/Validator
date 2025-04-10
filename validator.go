@@ -1,14 +1,15 @@
 package validator
 
 import (
+	"fmt"
 	"github.com/Pashgunt/Validator/internal/cache"
 	"github.com/Pashgunt/Validator/internal/contract"
 	"github.com/Pashgunt/Validator/internal/enum"
 	maphelper "github.com/Pashgunt/Validator/internal/helper/map"
 	structhelper "github.com/Pashgunt/Validator/internal/helper/struct"
+	"github.com/Pashgunt/Validator/internal/service"
 	"github.com/Pashgunt/Validator/internal/violation"
 	"reflect"
-	"strings"
 )
 
 type ValidatorInterface interface {
@@ -41,39 +42,18 @@ func (v *SimpleValidator) Validate(value interface{}, constraints *Collection) {
 		reflectValue := reflect.ValueOf(value)
 
 		if reflectValue.Type().Kind() != reflect.Struct {
-			panic("ожидалась структура")
-		}
-
-		getOrCreateValidators := func(tag string) AssertListValue {
-			tagSlice := strings.Split(tag, "|")
-			var validators AssertListValue
-
-			for _, tagItem := range tagSlice {
-				switch tagItem {
-				case "not_blank":
-					if ok := v.cache.Exist(tagItem); ok {
-						validators = append(validators, v.cache.Get(tagItem))
-						continue
-					}
-
-					notBlank := NewNotBlank("TEST")
-					v.cache.Set(tagItem, notBlank)
-					validators = append(validators, notBlank)
-				}
-			}
-
-			return validators
+			panic("Expect structure")
 		}
 
 		for i := 0; i < reflectValue.NumField(); i++ {
-			tag := reflectValue.Type().Field(i).Tag.Get("assert")
+			tag := reflectValue.Type().Field(i).Tag.Get(enum.KeyAssert)
 
 			if tag == "" {
 				continue
 			}
 
 			v.doProcessConstraintValidate(
-				getOrCreateValidators(tag),
+				v.getOrCreateValidator(tag, reflectValue.Type().Field(i).Name),
 				reflectValue.Field(i).Interface(),
 				reflectValue.String(),
 				reflectValue.Type().Field(i).Name,
@@ -159,8 +139,8 @@ func (v *SimpleValidator) doProcessConstraintValidate(
 	for _, constraint := range constraintList {
 		v.setConstraintMainData(constraint, root, property)
 
-		for _, validator := range constraint.ProcessValidators() {
-			validator.Process(constraint, value, v.exception)
+		for _, validatorItem := range constraint.ProcessValidators() {
+			validatorItem.Process(constraint, value, v.exception)
 		}
 	}
 }
@@ -171,4 +151,28 @@ func (v *SimpleValidator) setConstraintMainData(
 ) {
 	constraint.SetRoot(root)
 	constraint.SetPropertyPath(property)
+}
+
+func (v *SimpleValidator) getOrCreateValidator(tag string, fieldName string) AssertListValue {
+	var validators AssertListValue
+
+	for _, tagItem := range service.GetTags(tag) {
+		switch tagItem {
+		case string(enum.NotBlank):
+			message := fmt.Sprintf(enum.ConstraintMessageDefault[enum.NotBlank], fieldName)
+			if ok := v.cache.Exist(tagItem); ok {
+				constraint := v.cache.Get(tagItem)
+				constraint.SetMessage(message)
+				validators = append(validators, constraint)
+
+				continue
+			}
+
+			notBlank := NewNotBlank(message)
+			v.cache.Set(tagItem, notBlank)
+			validators = append(validators, notBlank)
+		}
+	}
+
+	return validators
 }
