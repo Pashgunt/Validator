@@ -1,12 +1,14 @@
 package validator
 
 import (
+	"github.com/Pashgunt/Validator/internal/cache"
 	"github.com/Pashgunt/Validator/internal/contract"
 	"github.com/Pashgunt/Validator/internal/enum"
 	maphelper "github.com/Pashgunt/Validator/internal/helper/map"
 	structhelper "github.com/Pashgunt/Validator/internal/helper/struct"
 	"github.com/Pashgunt/Validator/internal/violation"
 	"reflect"
+	"strings"
 )
 
 type ValidatorInterface interface {
@@ -20,6 +22,7 @@ type ValidatorExceptionInterface interface {
 
 type SimpleValidator struct {
 	exception contract.ValidationFailedExceptionInterface
+	cache     contract.CacheInterface
 }
 
 func (v *SimpleValidator) Exception() contract.ValidationFailedExceptionInterface {
@@ -27,10 +30,59 @@ func (v *SimpleValidator) Exception() contract.ValidationFailedExceptionInterfac
 }
 
 func NewSimpleValidator() *SimpleValidator {
-	return &SimpleValidator{exception: &violation.ValidationFailedException{}}
+	return &SimpleValidator{
+		exception: &violation.ValidationFailedException{},
+		cache:     cache.NewCache(),
+	}
 }
 
-func (v *SimpleValidator) Validate(value interface{}, constraints Collection) {
+func (v *SimpleValidator) Validate(value interface{}, constraints *Collection) {
+	if constraints == nil {
+		reflectValue := reflect.ValueOf(value)
+
+		if reflectValue.Type().Kind() != reflect.Struct {
+			panic("ожидалась структура")
+		}
+
+		getOrCreateValidators := func(tag string) AssertListValue {
+			tagSlice := strings.Split(tag, "|")
+			var validators AssertListValue
+
+			for _, tagItem := range tagSlice {
+				switch tagItem {
+				case "not_blank":
+					if ok := v.cache.Exist(tagItem); ok {
+						validators = append(validators, v.cache.Get(tagItem))
+						continue
+					}
+
+					notBlank := NewNotBlank("TEST")
+					v.cache.Set(tagItem, notBlank)
+					validators = append(validators, notBlank)
+				}
+			}
+
+			return validators
+		}
+
+		for i := 0; i < reflectValue.NumField(); i++ {
+			tag := reflectValue.Type().Field(i).Tag.Get("assert")
+
+			if tag == "" {
+				continue
+			}
+
+			v.doProcessConstraintValidate(
+				getOrCreateValidators(tag),
+				reflectValue.Field(i).Interface(),
+				reflectValue.String(),
+				reflectValue.Type().Field(i).Name,
+			)
+		}
+
+		return
+	}
+
 	reflectValue := reflect.ValueOf(value)
 
 	switch reflectValue.Kind() {
@@ -38,21 +90,21 @@ func (v *SimpleValidator) Validate(value interface{}, constraints Collection) {
 		reflectValue = reflectValue.Elem()
 		v.processInitValidate(
 			structhelper.GetFillValidateData(reflectValue),
-			constraints,
+			*constraints,
 			reflectValue.String(),
 		)
 		break
 	case reflect.Struct:
 		v.processInitValidate(
 			structhelper.GetFillValidateData(reflectValue),
-			constraints,
+			*constraints,
 			reflectValue.String(),
 		)
 		break
 	case reflect.Map:
 		v.processInitValidate(
 			maphelper.GetFillValidateData(reflectValue),
-			constraints,
+			*constraints,
 			reflectValue.String(),
 		)
 		break
