@@ -9,7 +9,6 @@ import (
 )
 
 type UserPasswordValidator struct {
-	assocStrength map[int]float64
 }
 
 func NewUserPasswordValidator() contract.Validator {

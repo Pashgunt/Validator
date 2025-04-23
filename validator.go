@@ -70,21 +70,18 @@ func (v *SimpleValidator) Validate(value interface{}, constraints *Collection) {
 			*constraints,
 			reflectValue.String(),
 		)
-		break
 	case reflect.Struct:
 		v.processInitValidate(
 			structhelper.GetFillValidateData(reflectValue),
 			*constraints,
 			reflectValue.String(),
 		)
-		break
 	case reflect.Map:
 		v.processInitValidate(
 			maphelper.GetFillValidateData(reflectValue),
 			*constraints,
 			reflectValue.String(),
 		)
-		break
 	default:
 		panic("Unsupported type for validate: " + reflectValue.Kind().String())
 	}

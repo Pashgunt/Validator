@@ -62,7 +62,7 @@ func (v *CompromisedPasswordValidator) Process(
 		return false
 	}
 
-	if checkPassword(value.(string)) == false {
+	if !checkPassword(value.(string)) {
 		return
 	}
 
