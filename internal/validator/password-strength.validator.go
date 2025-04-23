@@ -5,6 +5,7 @@ import (
 	"github.com/Pashgunt/Validator/internal/factory"
 	stringhelper "github.com/Pashgunt/Validator/internal/helper/string"
 	"github.com/Pashgunt/Validator/pkg"
+	"github.com/Pashgunt/Validator/pkg/interface"
 	"reflect"
 )
 
@@ -12,14 +13,14 @@ type PasswordStrengthValidator struct {
 	assocStrength map[int]float64
 }
 
-func NewPasswordStrengthValidator() *PasswordStrengthValidator {
+func NewPasswordStrengthValidator() contract.Validator {
 	return &PasswordStrengthValidator{}
 }
 
 func (v *PasswordStrengthValidator) Process(
 	constraint contract.ConstraintInterface,
 	value interface{},
-	exception contract.ValidationFailedExceptionInterface,
+	exception pkginterface.ValidationFailedExceptionInterface,
 ) {
 	v.assocStrength = map[int]float64{
 		pkg.Weak:       20,
@@ -35,7 +36,7 @@ func (v *PasswordStrengthValidator) Process(
 	}
 
 	exception.AppendMessageGeneral(passwordStrengthConstraint.Message())
-	exception.AddViolations([]contract.ConstraintViolationInterface{factory.ConstraintViolationFactory(
+	exception.AddViolations([]pkginterface.ConstraintViolationInterface{factory.ConstraintViolationFactory(
 		passwordStrengthConstraint,
 		value,
 		"Message",

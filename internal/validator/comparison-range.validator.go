@@ -3,23 +3,24 @@ package validatorprocess
 import (
 	"github.com/Pashgunt/Validator/internal/contract"
 	"github.com/Pashgunt/Validator/internal/factory"
+	"github.com/Pashgunt/Validator/pkg/interface"
 	"reflect"
 )
 
 type ComparisonRangeValidator struct {
 	comparisonRangeConstraint contract.ConstraintLengthInterface
-	exception                 contract.ValidationFailedExceptionInterface
+	exception                 pkginterface.ValidationFailedExceptionInterface
 	value                     int
 }
 
-func NewComparisonRangeValidator() *ComparisonRangeValidator {
+func NewComparisonRangeValidator() contract.Validator {
 	return &ComparisonRangeValidator{}
 }
 
 func (c *ComparisonRangeValidator) Process(
 	constraint contract.ConstraintInterface,
 	value interface{},
-	exception contract.ValidationFailedExceptionInterface,
+	exception pkginterface.ValidationFailedExceptionInterface,
 ) {
 	c.comparisonRangeConstraint = reflect.ValueOf(constraint).Interface().(contract.ConstraintLengthInterface)
 	c.exception = exception
@@ -39,7 +40,7 @@ func (c *ComparisonRangeValidator) processMessage(
 	messageMethod string,
 ) {
 	c.exception.AppendMessageGeneral(message)
-	c.exception.AddViolations([]contract.ConstraintViolationInterface{factory.ConstraintViolationFactory(
+	c.exception.AddViolations([]pkginterface.ConstraintViolationInterface{factory.ConstraintViolationFactory(
 		c.comparisonRangeConstraint,
 		c.value,
 		messageMethod,

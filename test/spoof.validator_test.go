@@ -1,10 +1,11 @@
 package test
 
 import (
-	validator "github.com/Pashgunt/Validator"
 	"github.com/Pashgunt/Validator/internal/contract"
 	"github.com/Pashgunt/Validator/internal/validator"
 	"github.com/Pashgunt/Validator/internal/violation"
+	"github.com/Pashgunt/Validator/pkg/factory"
+	"github.com/Pashgunt/Validator/pkg/interface"
 	testhelper "github.com/Pashgunt/Validator/test/helper"
 	"testing"
 )
@@ -16,13 +17,13 @@ const (
 type spoofArgs struct {
 	constraint contract.ConstraintInterface
 	value      interface{}
-	exception  contract.ValidationFailedExceptionInterface
+	exception  pkginterface.ValidationFailedExceptionInterface
 }
 
 func newSpoofArgs(value interface{}) *spoofArgs {
 	return &spoofArgs{
 		value:      value,
-		constraint: validator.NewNotBlank(testhelper.DefaultErrorMessage),
+		constraint: factory.NewSpoof(testhelper.DefaultErrorMessage),
 		exception:  &violation.ValidationFailedException{},
 	}
 }

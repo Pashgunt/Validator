@@ -3,23 +3,24 @@ package validatorprocess
 import (
 	"github.com/Pashgunt/Validator/internal/contract"
 	"github.com/Pashgunt/Validator/internal/factory"
+	"github.com/Pashgunt/Validator/pkg/interface"
 	"reflect"
 )
 
 type LengthValidator struct {
 	lengthConstraintConverted contract.ConstraintLengthInterface
-	exception                 contract.ValidationFailedExceptionInterface
+	exception                 pkginterface.ValidationFailedExceptionInterface
 	value                     string
 }
 
-func NewLengthValidator() *LengthValidator {
+func NewLengthValidator() contract.Validator {
 	return &LengthValidator{}
 }
 
 func (l *LengthValidator) Process(
 	constraint contract.ConstraintInterface,
 	value interface{},
-	exception contract.ValidationFailedExceptionInterface,
+	exception pkginterface.ValidationFailedExceptionInterface,
 ) {
 	l.lengthConstraintConverted = reflect.ValueOf(constraint).Interface().(contract.ConstraintLengthInterface)
 	l.exception = exception
@@ -39,7 +40,7 @@ func (l *LengthValidator) processMessage(
 	messageMethod string,
 ) {
 	l.exception.AppendMessageGeneral(message)
-	l.exception.AddViolations([]contract.ConstraintViolationInterface{factory.ConstraintViolationFactory(
+	l.exception.AddViolations([]pkginterface.ConstraintViolationInterface{factory.ConstraintViolationFactory(
 		l.lengthConstraintConverted,
 		l.value,
 		messageMethod,

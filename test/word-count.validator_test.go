@@ -1,10 +1,11 @@
 package test
 
 import (
-	validator "github.com/Pashgunt/Validator"
 	"github.com/Pashgunt/Validator/internal/contract"
 	"github.com/Pashgunt/Validator/internal/validator"
 	"github.com/Pashgunt/Validator/internal/violation"
+	"github.com/Pashgunt/Validator/pkg/factory"
+	"github.com/Pashgunt/Validator/pkg/interface"
 	testhelper "github.com/Pashgunt/Validator/test/helper"
 	"testing"
 )
@@ -16,13 +17,13 @@ const (
 type wordCountArgs struct {
 	constraint contract.ConstraintInterface
 	value      interface{}
-	exception  contract.ValidationFailedExceptionInterface
+	exception  pkginterface.ValidationFailedExceptionInterface
 }
 
 func newWordCountArgs(value interface{}, min int, max int, minMessage string, maxMessage string) *wordCountArgs {
 	return &wordCountArgs{
 		value:      value,
-		constraint: validator.NewWordCount(min, max, minMessage, maxMessage),
+		constraint: factory.NewWordCount(min, max, minMessage, maxMessage),
 		exception:  &violation.ValidationFailedException{},
 	}
 }

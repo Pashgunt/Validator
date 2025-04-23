@@ -1,10 +1,11 @@
 package test
 
 import (
-	validator "github.com/Pashgunt/Validator"
 	"github.com/Pashgunt/Validator/internal/contract"
 	"github.com/Pashgunt/Validator/internal/validator"
 	"github.com/Pashgunt/Validator/internal/violation"
+	"github.com/Pashgunt/Validator/pkg/factory"
+	"github.com/Pashgunt/Validator/pkg/interface"
 	testhelper "github.com/Pashgunt/Validator/test/helper"
 	"testing"
 )
@@ -16,13 +17,13 @@ const (
 type isTrueArgs struct {
 	constraint contract.ConstraintInterface
 	value      interface{}
-	exception  contract.ValidationFailedExceptionInterface
+	exception  pkginterface.ValidationFailedExceptionInterface
 }
 
 func newIsTrueArgs(value interface{}) *isTrueArgs {
 	return &isTrueArgs{
 		value:      value,
-		constraint: validator.NewIsTrue(testhelper.DefaultErrorMessage),
+		constraint: factory.NewIsTrue(testhelper.DefaultErrorMessage),
 		exception:  &violation.ValidationFailedException{},
 	}
 }

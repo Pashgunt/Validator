@@ -5,6 +5,7 @@ import (
 	"github.com/Pashgunt/Validator/internal/contract"
 	"github.com/Pashgunt/Validator/internal/factory"
 	stringhelper "github.com/Pashgunt/Validator/internal/helper/string"
+	"github.com/Pashgunt/Validator/pkg/interface"
 	"net/http"
 	"strings"
 )
@@ -17,14 +18,14 @@ const (
 type CompromisedPasswordValidator struct {
 }
 
-func NewCompromisedPasswordValidator() *CompromisedPasswordValidator {
+func NewCompromisedPasswordValidator() contract.Validator {
 	return &CompromisedPasswordValidator{}
 }
 
 func (v *CompromisedPasswordValidator) Process(
 	constraint contract.ConstraintInterface,
 	value interface{},
-	exception contract.ValidationFailedExceptionInterface,
+	exception pkginterface.ValidationFailedExceptionInterface,
 ) {
 	checkPassword := func(password string) bool {
 		hash := strings.ToUpper(stringhelper.HashPassword(password))
@@ -62,7 +63,7 @@ func (v *CompromisedPasswordValidator) Process(
 	}
 
 	exception.AppendMessageGeneral(constraint.Message())
-	exception.AddViolations([]contract.ConstraintViolationInterface{factory.ConstraintViolationFactory(
+	exception.AddViolations([]pkginterface.ConstraintViolationInterface{factory.ConstraintViolationFactory(
 		constraint,
 		value,
 		"Message",

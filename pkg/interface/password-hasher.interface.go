@@ -1,4 +1,4 @@
-package pkg
+package pkginterface
 
 type PasswordHasherInterface interface {
 	GetPasswordHash() string

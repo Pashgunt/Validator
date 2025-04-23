@@ -1,10 +1,11 @@
 package test
 
 import (
-	validator "github.com/Pashgunt/Validator"
 	"github.com/Pashgunt/Validator/internal/contract"
 	"github.com/Pashgunt/Validator/internal/validator"
 	"github.com/Pashgunt/Validator/internal/violation"
+	"github.com/Pashgunt/Validator/pkg/factory"
+	"github.com/Pashgunt/Validator/pkg/interface"
 	testhelper "github.com/Pashgunt/Validator/test/helper"
 	"reflect"
 	"testing"
@@ -17,13 +18,13 @@ const (
 type isTypeArgs struct {
 	constraint contract.ConstraintInterface
 	value      interface{}
-	exception  contract.ValidationFailedExceptionInterface
+	exception  pkginterface.ValidationFailedExceptionInterface
 }
 
 func newIsTypeArgs(value interface{}, dataType reflect.Kind) *isTypeArgs {
 	return &isTypeArgs{
 		value:      value,
-		constraint: validator.NewIsType(dataType, testhelper.DefaultErrorMessage),
+		constraint: factory.NewIsType(testhelper.DefaultErrorMessage, dataType),
 		exception:  &violation.ValidationFailedException{},
 	}
 }

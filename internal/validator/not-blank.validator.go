@@ -3,26 +3,27 @@ package validatorprocess
 import (
 	"github.com/Pashgunt/Validator/internal/contract"
 	"github.com/Pashgunt/Validator/internal/factory"
+	"github.com/Pashgunt/Validator/pkg/interface"
 )
 
 type NotBlankValidator struct {
 }
 
-func NewNotBlankValidator() *NotBlankValidator {
+func NewNotBlankValidator() contract.Validator {
 	return &NotBlankValidator{}
 }
 
 func (v *NotBlankValidator) Process(
 	constraint contract.ConstraintInterface,
 	value interface{},
-	exception contract.ValidationFailedExceptionInterface,
+	exception pkginterface.ValidationFailedExceptionInterface,
 ) {
 	if value != "" {
 		return
 	}
 
 	exception.AppendMessageGeneral(constraint.Message())
-	exception.AddViolations([]contract.ConstraintViolationInterface{factory.ConstraintViolationFactory(
+	exception.AddViolations([]pkginterface.ConstraintViolationInterface{factory.ConstraintViolationFactory(
 		constraint,
 		value,
 		"Message",

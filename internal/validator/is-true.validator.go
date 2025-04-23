@@ -3,20 +3,21 @@ package validatorprocess
 import (
 	"github.com/Pashgunt/Validator/internal/contract"
 	"github.com/Pashgunt/Validator/internal/factory"
+	"github.com/Pashgunt/Validator/pkg/interface"
 	"reflect"
 )
 
 type IsTrueValidator struct {
 }
 
-func NewIsTrueValidator() *IsTrueValidator {
+func NewIsTrueValidator() contract.Validator {
 	return &IsTrueValidator{}
 }
 
 func (v *IsTrueValidator) Process(
 	constraint contract.ConstraintInterface,
 	value interface{},
-	exception contract.ValidationFailedExceptionInterface,
+	exception pkginterface.ValidationFailedExceptionInterface,
 ) {
 	if reflect.ValueOf(value).Kind() != reflect.Bool {
 		return
@@ -27,7 +28,7 @@ func (v *IsTrueValidator) Process(
 	}
 
 	exception.AppendMessageGeneral(constraint.Message())
-	exception.AddViolations([]contract.ConstraintViolationInterface{factory.ConstraintViolationFactory(
+	exception.AddViolations([]pkginterface.ConstraintViolationInterface{factory.ConstraintViolationFactory(
 		constraint,
 		value,
 		"Message",

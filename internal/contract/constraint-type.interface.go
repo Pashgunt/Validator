@@ -4,5 +4,6 @@ import "reflect"
 
 type ConstraintIsTypeInterface interface {
 	DataType() reflect.Kind
+	SetDataType(reflect.Kind)
 	ConstraintInterface
 }

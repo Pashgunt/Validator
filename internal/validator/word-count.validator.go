@@ -3,24 +3,25 @@ package validatorprocess
 import (
 	"github.com/Pashgunt/Validator/internal/contract"
 	"github.com/Pashgunt/Validator/internal/factory"
+	"github.com/Pashgunt/Validator/pkg/interface"
 	"reflect"
 	"strings"
 )
 
 type WordCountValidator struct {
 	lengthConstraintConverted contract.ConstraintLengthInterface
-	exception                 contract.ValidationFailedExceptionInterface
+	exception                 pkginterface.ValidationFailedExceptionInterface
 	value                     interface{}
 }
 
-func NewWordCountValidator() *WordCountValidator {
+func NewWordCountValidator() contract.Validator {
 	return &WordCountValidator{}
 }
 
 func (l *WordCountValidator) Process(
 	constraint contract.ConstraintInterface,
 	value interface{},
-	exception contract.ValidationFailedExceptionInterface,
+	exception pkginterface.ValidationFailedExceptionInterface,
 ) {
 	l.lengthConstraintConverted = reflect.ValueOf(constraint).Interface().(contract.ConstraintLengthInterface)
 	l.exception = exception
@@ -41,7 +42,7 @@ func (l *WordCountValidator) processMessage(
 	messageMethod string,
 ) {
 	l.exception.AppendMessageGeneral(message)
-	l.exception.AddViolations([]contract.ConstraintViolationInterface{factory.ConstraintViolationFactory(
+	l.exception.AddViolations([]pkginterface.ConstraintViolationInterface{factory.ConstraintViolationFactory(
 		l.lengthConstraintConverted,
 		l.value,
 		messageMethod,

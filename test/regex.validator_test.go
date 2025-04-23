@@ -1,10 +1,11 @@
 package test
 
 import (
-	validator "github.com/Pashgunt/Validator"
 	"github.com/Pashgunt/Validator/internal/contract"
 	"github.com/Pashgunt/Validator/internal/validator"
 	"github.com/Pashgunt/Validator/internal/violation"
+	"github.com/Pashgunt/Validator/pkg/factory"
+	"github.com/Pashgunt/Validator/pkg/interface"
 	testhelper "github.com/Pashgunt/Validator/test/helper"
 	"testing"
 )
@@ -16,13 +17,13 @@ const (
 type regexArgs struct {
 	constraint contract.ConstraintInterface
 	value      interface{}
-	exception  contract.ValidationFailedExceptionInterface
+	exception  pkginterface.ValidationFailedExceptionInterface
 }
 
 func newRegexArgs(value interface{}, pattern string) *regexArgs {
 	return &regexArgs{
 		value:      value,
-		constraint: validator.NewRegex(pattern, testhelper.DefaultErrorMessage),
+		constraint: factory.NewRegex(pattern, testhelper.DefaultErrorMessage),
 		exception:  &violation.ValidationFailedException{},
 	}
 }

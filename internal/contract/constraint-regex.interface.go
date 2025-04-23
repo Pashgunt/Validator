@@ -5,6 +5,7 @@ import (
 )
 
 type ConstraintRegexInterface interface {
-	Pattern() regexp.Regexp
+	Pattern() *regexp.Regexp
+	SetPattern(pattern *regexp.Regexp)
 	ConstraintInterface
 }

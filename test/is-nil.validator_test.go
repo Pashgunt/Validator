@@ -1,10 +1,11 @@
 package test
 
 import (
-	validator "github.com/Pashgunt/Validator"
 	"github.com/Pashgunt/Validator/internal/contract"
 	"github.com/Pashgunt/Validator/internal/validator"
 	"github.com/Pashgunt/Validator/internal/violation"
+	"github.com/Pashgunt/Validator/pkg/factory"
+	"github.com/Pashgunt/Validator/pkg/interface"
 	testhelper "github.com/Pashgunt/Validator/test/helper"
 	"testing"
 )
@@ -16,13 +17,13 @@ const (
 type isNilArgs struct {
 	constraint contract.ConstraintInterface
 	value      interface{}
-	exception  contract.ValidationFailedExceptionInterface
+	exception  pkginterface.ValidationFailedExceptionInterface
 }
 
 func newIsNilArgs(value interface{}) *isNilArgs {
 	return &isNilArgs{
 		value:      value,
-		constraint: validator.NewBlank(testhelper.DefaultErrorMessage),
+		constraint: factory.NewBlank(testhelper.DefaultErrorMessage),
 		exception:  &violation.ValidationFailedException{},
 	}
 }

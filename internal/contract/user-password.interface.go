@@ -1,8 +1,9 @@
 package contract
 
-import "github.com/Pashgunt/Validator/pkg"
+import "github.com/Pashgunt/Validator/pkg/interface"
 
 type UserPasswordInterface interface {
-	PasswordHasher() pkg.PasswordHasherInterface
+	PasswordHasher() pkginterface.PasswordHasherInterface
+	SetPasswordHasher(passwordHasher pkginterface.PasswordHasherInterface)
 	ConstraintInterface
 }

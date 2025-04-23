@@ -1,7 +1,10 @@
 package contract
 
+import "github.com/Pashgunt/Validator/pkg/interface"
+
 type ConstraintInterface interface {
 	ProcessValidators() []Validator
+	AddProcessValidator(validators []Validator)
 	ConstraintMainDataInterface
 }
 
@@ -18,6 +21,6 @@ type Validator interface {
 	Process(
 		regexConstraint ConstraintInterface,
 		value interface{},
-		exception ValidationFailedExceptionInterface,
+		exception pkginterface.ValidationFailedExceptionInterface,
 	)
 }

@@ -3,6 +3,7 @@ package validatorprocess
 import (
 	"github.com/Pashgunt/Validator/internal/contract"
 	"github.com/Pashgunt/Validator/internal/factory"
+	"github.com/Pashgunt/Validator/pkg/interface"
 	"regexp"
 	"unicode"
 )
@@ -14,14 +15,14 @@ const (
 type SpoofValidator struct {
 }
 
-func NewSpoofValidator() *SpoofValidator {
+func NewSpoofValidator() contract.Validator {
 	return &SpoofValidator{}
 }
 
 func (v *SpoofValidator) Process(
 	constraint contract.ConstraintInterface,
 	value interface{},
-	exception contract.ValidationFailedExceptionInterface,
+	exception pkginterface.ValidationFailedExceptionInterface,
 ) {
 	checkSpoofing := func(value string) bool {
 		if !regexp.MustCompile(PatternInvisibleSymbols).MatchString(value) {
@@ -42,7 +43,7 @@ func (v *SpoofValidator) Process(
 	}
 
 	exception.AppendMessageGeneral(constraint.Message())
-	exception.AddViolations([]contract.ConstraintViolationInterface{factory.ConstraintViolationFactory(
+	exception.AddViolations([]pkginterface.ConstraintViolationInterface{factory.ConstraintViolationFactory(
 		constraint,
 		value,
 		"Message",

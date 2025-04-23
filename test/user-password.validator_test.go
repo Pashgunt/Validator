@@ -1,11 +1,11 @@
 package test
 
 import (
-	validator "github.com/Pashgunt/Validator"
 	"github.com/Pashgunt/Validator/internal/contract"
 	"github.com/Pashgunt/Validator/internal/validator"
 	"github.com/Pashgunt/Validator/internal/violation"
-	"github.com/Pashgunt/Validator/pkg"
+	"github.com/Pashgunt/Validator/pkg/factory"
+	"github.com/Pashgunt/Validator/pkg/interface"
 	testhelper "github.com/Pashgunt/Validator/test/helper"
 	"testing"
 )
@@ -17,13 +17,13 @@ const (
 type UserPasswordArgs struct {
 	constraint contract.ConstraintInterface
 	value      interface{}
-	exception  contract.ValidationFailedExceptionInterface
+	exception  pkginterface.ValidationFailedExceptionInterface
 }
 
-func newUserPasswordArgs(value interface{}, passwordHasher pkg.PasswordHasherInterface) *UserPasswordArgs {
+func newUserPasswordArgs(value interface{}, passwordHasher pkginterface.PasswordHasherInterface) *UserPasswordArgs {
 	return &UserPasswordArgs{
 		value:      value,
-		constraint: validator.NewUserPassword(testhelper.DefaultErrorMessage, passwordHasher),
+		constraint: factory.NewUserPassword(testhelper.DefaultErrorMessage, passwordHasher),
 		exception:  &violation.ValidationFailedException{},
 	}
 }

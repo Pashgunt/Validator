@@ -1,4 +1,4 @@
-package contract
+package pkginterface
 
 type ValidationFailedExceptionInterface interface {
 	MessageGeneral() string

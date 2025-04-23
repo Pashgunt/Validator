@@ -4,6 +4,7 @@ import (
 	"github.com/Pashgunt/Validator/internal/contract"
 	"github.com/Pashgunt/Validator/internal/enum"
 	"github.com/Pashgunt/Validator/internal/factory"
+	"github.com/Pashgunt/Validator/pkg/interface"
 	"reflect"
 )
 
@@ -13,14 +14,14 @@ type ComparisonValidator struct {
 	constraint         contract.ComparisonInterface
 }
 
-func NewComparisonValidator(comparisonOperator enum.ComparisonOperator) *ComparisonValidator {
+func NewComparisonValidator(comparisonOperator enum.ComparisonOperator) contract.Validator {
 	return &ComparisonValidator{comparisonOperator: comparisonOperator}
 }
 
 func (c *ComparisonValidator) Process(
 	constraint contract.ConstraintInterface,
 	value interface{},
-	exception contract.ValidationFailedExceptionInterface,
+	exception pkginterface.ValidationFailedExceptionInterface,
 ) {
 	c.value = value.(int)
 	comparisonConstraint := reflect.ValueOf(constraint).Interface().(contract.ComparisonInterface)
@@ -31,7 +32,7 @@ func (c *ComparisonValidator) Process(
 	}
 
 	exception.AppendMessageGeneral(comparisonConstraint.Message())
-	exception.AddViolations([]contract.ConstraintViolationInterface{factory.ConstraintViolationFactory(
+	exception.AddViolations([]pkginterface.ConstraintViolationInterface{factory.ConstraintViolationFactory(
 		comparisonConstraint,
 		value,
 		"Message",

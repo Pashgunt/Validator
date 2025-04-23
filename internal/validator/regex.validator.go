@@ -4,20 +4,21 @@ import (
 	"fmt"
 	"github.com/Pashgunt/Validator/internal/contract"
 	"github.com/Pashgunt/Validator/internal/factory"
+	"github.com/Pashgunt/Validator/pkg/interface"
 	"reflect"
 )
 
 type RegexValidator struct {
 }
 
-func NewRegexValidator() *RegexValidator {
+func NewRegexValidator() contract.Validator {
 	return &RegexValidator{}
 }
 
 func (v *RegexValidator) Process(
 	constraint contract.ConstraintInterface,
 	value interface{},
-	exception contract.ValidationFailedExceptionInterface,
+	exception pkginterface.ValidationFailedExceptionInterface,
 ) {
 	regexConstraintConverted := reflect.ValueOf(constraint).Interface().(contract.ConstraintRegexInterface)
 	pattern := regexConstraintConverted.Pattern()
@@ -27,7 +28,7 @@ func (v *RegexValidator) Process(
 	}
 
 	exception.AppendMessageGeneral(regexConstraintConverted.Message())
-	exception.AddViolations([]contract.ConstraintViolationInterface{factory.ConstraintViolationFactory(
+	exception.AddViolations([]pkginterface.ConstraintViolationInterface{factory.ConstraintViolationFactory(
 		regexConstraintConverted,
 		value,
 		"Message",

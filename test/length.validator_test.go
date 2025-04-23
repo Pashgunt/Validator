@@ -1,10 +1,11 @@
 package test
 
 import (
-	validator "github.com/Pashgunt/Validator"
 	"github.com/Pashgunt/Validator/internal/contract"
 	"github.com/Pashgunt/Validator/internal/validator"
 	"github.com/Pashgunt/Validator/internal/violation"
+	"github.com/Pashgunt/Validator/pkg/factory"
+	"github.com/Pashgunt/Validator/pkg/interface"
 	testhelper "github.com/Pashgunt/Validator/test/helper"
 	"testing"
 )
@@ -16,13 +17,13 @@ const (
 type lengthArgs struct {
 	constraint contract.ConstraintInterface
 	value      interface{}
-	exception  contract.ValidationFailedExceptionInterface
+	exception  pkginterface.ValidationFailedExceptionInterface
 }
 
 func newLengthArgs(value interface{}, min int, max int, minMessage string, maxMessage string) *lengthArgs {
 	return &lengthArgs{
 		value:      value,
-		constraint: validator.NewLength(min, max, minMessage, maxMessage),
+		constraint: factory.NewLength(min, max, minMessage, maxMessage),
 		exception:  &violation.ValidationFailedException{},
 	}
 }

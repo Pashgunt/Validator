@@ -1,10 +1,12 @@
 package violation
 
-import "github.com/Pashgunt/Validator/internal/contract"
+import (
+	"github.com/Pashgunt/Validator/pkg/interface"
+)
 
 type ValidationFailedException struct {
 	messageGeneral string
-	violations     []contract.ConstraintViolationInterface
+	violations     []pkginterface.ConstraintViolationInterface
 }
 
 func (v *ValidationFailedException) MessageGeneral() string {
@@ -19,15 +21,15 @@ func (v *ValidationFailedException) AppendMessageGeneral(message string) {
 	v.messageGeneral += message + "\n"
 }
 
-func (v *ValidationFailedException) Violations() []contract.ConstraintViolationInterface {
+func (v *ValidationFailedException) Violations() []pkginterface.ConstraintViolationInterface {
 	return v.violations
 }
 
-func (v *ValidationFailedException) SetViolations(violations []contract.ConstraintViolationInterface) {
+func (v *ValidationFailedException) SetViolations(violations []pkginterface.ConstraintViolationInterface) {
 	v.violations = violations
 }
 
-func (v *ValidationFailedException) AddViolations(violations []contract.ConstraintViolationInterface) {
+func (v *ValidationFailedException) AddViolations(violations []pkginterface.ConstraintViolationInterface) {
 	v.violations = append(v.violations, violations...)
 }
 
@@ -35,7 +37,7 @@ type ConstraintViolation struct {
 	value             interface{}
 	propertyPathError string
 	rootError         string
-	message           contract.ConstraintViolationMessageInterface
+	message           pkginterface.ConstraintViolationMessageInterface
 }
 
 func (c *ConstraintViolation) Value() interface{} {
@@ -62,11 +64,11 @@ func (c *ConstraintViolation) SetRootError(root string) {
 	c.rootError = root
 }
 
-func (c *ConstraintViolation) Message() contract.ConstraintViolationMessageInterface {
+func (c *ConstraintViolation) Message() pkginterface.ConstraintViolationMessageInterface {
 	return c.message
 }
 
-func (c *ConstraintViolation) SetMessage(message contract.ConstraintViolationMessageInterface) {
+func (c *ConstraintViolation) SetMessage(message pkginterface.ConstraintViolationMessageInterface) {
 	c.message = message
 }
 

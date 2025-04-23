@@ -1,11 +1,12 @@
 package test
 
 import (
-	validator "github.com/Pashgunt/Validator"
 	"github.com/Pashgunt/Validator/internal/contract"
 	"github.com/Pashgunt/Validator/internal/validator"
 	"github.com/Pashgunt/Validator/internal/violation"
 	"github.com/Pashgunt/Validator/pkg"
+	"github.com/Pashgunt/Validator/pkg/factory"
+	"github.com/Pashgunt/Validator/pkg/interface"
 	testhelper "github.com/Pashgunt/Validator/test/helper"
 	"testing"
 )
@@ -17,13 +18,13 @@ const (
 type hostnameArgs struct {
 	constraint contract.ConstraintInterface
 	value      interface{}
-	exception  contract.ValidationFailedExceptionInterface
+	exception  pkginterface.ValidationFailedExceptionInterface
 }
 
 func newHostnameArgs(value interface{}) *hostnameArgs {
 	return &hostnameArgs{
 		value:      value,
-		constraint: validator.NewRegex(pkg.Hostname, testhelper.DefaultErrorMessage),
+		constraint: factory.NewSpecialRegex(pkg.Hostname, testhelper.DefaultErrorMessage),
 		exception:  &violation.ValidationFailedException{},
 	}
 }
