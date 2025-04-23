@@ -2,6 +2,7 @@ package validatorprocess
 
 import (
 	"github.com/Pashgunt/Validator/internal/contract"
+	"github.com/Pashgunt/Validator/internal/enum"
 	"github.com/Pashgunt/Validator/internal/factory"
 	"github.com/Pashgunt/Validator/pkg/interface"
 	"reflect"
@@ -27,11 +28,11 @@ func (c *ComparisonRangeValidator) Process(
 	c.value = value.(int)
 
 	if c.value < c.comparisonRangeConstraint.Min() {
-		c.processMessage(c.comparisonRangeConstraint.MinMessage(), "MinMessage")
+		c.processMessage(c.comparisonRangeConstraint.MinMessage(), enum.MinMessageMethod)
 	}
 
 	if c.value > c.comparisonRangeConstraint.Max() {
-		c.processMessage(c.comparisonRangeConstraint.MaxMessage(), "MaxMessage")
+		c.processMessage(c.comparisonRangeConstraint.MaxMessage(), enum.MaxMessageMethod)
 	}
 }
 

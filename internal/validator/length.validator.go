@@ -2,6 +2,7 @@ package validatorprocess
 
 import (
 	"github.com/Pashgunt/Validator/internal/contract"
+	"github.com/Pashgunt/Validator/internal/enum"
 	"github.com/Pashgunt/Validator/internal/factory"
 	"github.com/Pashgunt/Validator/pkg/interface"
 	"reflect"
@@ -27,11 +28,11 @@ func (l *LengthValidator) Process(
 	l.value = value.(string)
 
 	if len(l.value) < l.lengthConstraintConverted.Min() {
-		l.processMessage(l.lengthConstraintConverted.MinMessage(), "MinMessage")
+		l.processMessage(l.lengthConstraintConverted.MinMessage(), enum.MinMessageMethod)
 	}
 
 	if len(l.value) > l.lengthConstraintConverted.Max() {
-		l.processMessage(l.lengthConstraintConverted.MaxMessage(), "MaxMessage")
+		l.processMessage(l.lengthConstraintConverted.MaxMessage(), enum.MaxMessageMethod)
 	}
 }
 

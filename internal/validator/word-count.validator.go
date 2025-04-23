@@ -2,6 +2,7 @@ package validatorprocess
 
 import (
 	"github.com/Pashgunt/Validator/internal/contract"
+	"github.com/Pashgunt/Validator/internal/enum"
 	"github.com/Pashgunt/Validator/internal/factory"
 	"github.com/Pashgunt/Validator/pkg/interface"
 	"reflect"
@@ -29,11 +30,11 @@ func (l *WordCountValidator) Process(
 	countWords := len(strings.Fields(l.value.(string)))
 
 	if countWords < l.lengthConstraintConverted.Min() {
-		l.processMessage(l.lengthConstraintConverted.MinMessage(), "MinMessage")
+		l.processMessage(l.lengthConstraintConverted.MinMessage(), enum.MinMessageMethod)
 	}
 
 	if countWords > l.lengthConstraintConverted.Max() {
-		l.processMessage(l.lengthConstraintConverted.MaxMessage(), "MaxMessage")
+		l.processMessage(l.lengthConstraintConverted.MaxMessage(), enum.MaxMessageMethod)
 	}
 }
 

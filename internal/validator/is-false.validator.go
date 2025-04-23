@@ -2,9 +2,14 @@ package validatorprocess
 
 import (
 	"github.com/Pashgunt/Validator/internal/contract"
+	"github.com/Pashgunt/Validator/internal/enum"
 	"github.com/Pashgunt/Validator/internal/factory"
 	"github.com/Pashgunt/Validator/pkg/interface"
 	"reflect"
+)
+
+const (
+	isFalseValue = false
 )
 
 type IsFalseValidator struct {
@@ -23,7 +28,7 @@ func (v *IsFalseValidator) Process(
 		return
 	}
 
-	if value == false {
+	if value == isFalseValue {
 		return
 	}
 
@@ -31,6 +36,6 @@ func (v *IsFalseValidator) Process(
 	exception.AddViolations([]pkginterface.ConstraintViolationInterface{factory.ConstraintViolationFactory(
 		constraint,
 		value,
-		"Message",
+		enum.MessageMethod,
 	)})
 }

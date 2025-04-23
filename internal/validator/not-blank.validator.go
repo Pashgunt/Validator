@@ -2,6 +2,7 @@ package validatorprocess
 
 import (
 	"github.com/Pashgunt/Validator/internal/contract"
+	"github.com/Pashgunt/Validator/internal/enum"
 	"github.com/Pashgunt/Validator/internal/factory"
 	"github.com/Pashgunt/Validator/pkg/interface"
 )
@@ -18,7 +19,7 @@ func (v *NotBlankValidator) Process(
 	value interface{},
 	exception pkginterface.ValidationFailedExceptionInterface,
 ) {
-	if value != "" {
+	if value != blankValue {
 		return
 	}
 
@@ -26,6 +27,6 @@ func (v *NotBlankValidator) Process(
 	exception.AddViolations([]pkginterface.ConstraintViolationInterface{factory.ConstraintViolationFactory(
 		constraint,
 		value,
-		"Message",
+		enum.MessageMethod,
 	)})
 }

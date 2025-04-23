@@ -2,6 +2,7 @@ package validatorprocess
 
 import (
 	"github.com/Pashgunt/Validator/internal/contract"
+	"github.com/Pashgunt/Validator/internal/enum"
 	"github.com/Pashgunt/Validator/internal/factory"
 	"github.com/Pashgunt/Validator/pkg/interface"
 	"regexp"
@@ -9,7 +10,8 @@ import (
 )
 
 const (
-	PatternInvisibleSymbols = `^[\x20-\x7E]*$`
+	patternInvisibleSymbols = `^[\x20-\x7E]*$`
+	isSpoof                 = true
 )
 
 type SpoofValidator struct {
@@ -25,20 +27,20 @@ func (v *SpoofValidator) Process(
 	exception pkginterface.ValidationFailedExceptionInterface,
 ) {
 	checkSpoofing := func(value string) bool {
-		if !regexp.MustCompile(PatternInvisibleSymbols).MatchString(value) {
-			return true
+		if !regexp.MustCompile(patternInvisibleSymbols).MatchString(value) {
+			return isSpoof
 		}
 
 		for _, letter := range value {
 			if unicode.Is(unicode.Latin, letter) && !unicode.Is(unicode.Latin, letter) {
-				return true
+				return isSpoof
 			}
 		}
 
-		return false
+		return !isSpoof
 	}
 
-	if checkSpoofing(value.(string)) == false {
+	if !checkSpoofing(value.(string)) {
 		return
 	}
 
@@ -46,6 +48,6 @@ func (v *SpoofValidator) Process(
 	exception.AddViolations([]pkginterface.ConstraintViolationInterface{factory.ConstraintViolationFactory(
 		constraint,
 		value,
-		"Message",
+		enum.MessageMethod,
 	)})
 }

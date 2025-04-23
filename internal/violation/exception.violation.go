@@ -4,6 +4,10 @@ import (
 	"github.com/Pashgunt/Validator/pkg/interface"
 )
 
+const (
+	newLineSymbol = "\n"
+)
+
 type ValidationFailedException struct {
 	messageGeneral string
 	violations     []pkginterface.ConstraintViolationInterface
@@ -18,7 +22,7 @@ func (v *ValidationFailedException) SetMessageGeneral(messageGeneral string) {
 }
 
 func (v *ValidationFailedException) AppendMessageGeneral(message string) {
-	v.messageGeneral += message + "\n"
+	v.messageGeneral += message + newLineSymbol
 }
 
 func (v *ValidationFailedException) Violations() []pkginterface.ConstraintViolationInterface {

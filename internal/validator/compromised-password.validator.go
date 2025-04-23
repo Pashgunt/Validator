@@ -3,6 +3,7 @@ package validatorprocess
 import (
 	"bufio"
 	"github.com/Pashgunt/Validator/internal/contract"
+	"github.com/Pashgunt/Validator/internal/enum"
 	"github.com/Pashgunt/Validator/internal/factory"
 	stringhelper "github.com/Pashgunt/Validator/internal/helper/string"
 	"github.com/Pashgunt/Validator/pkg/interface"
@@ -11,8 +12,11 @@ import (
 )
 
 const (
-	DefaultApiEndpoint    = "https://api.pwnedpasswords.com/range/"
-	DelimiterHashResponse = ":"
+	defaultApiEndpoint    = "https://api.pwnedpasswords.com/range/"
+	delimiterHashResponse = ":"
+	firstKIndex           = 5
+	indexForPart          = 0
+	blankParts
 )
 
 type CompromisedPasswordValidator struct {
@@ -29,7 +33,7 @@ func (v *CompromisedPasswordValidator) Process(
 ) {
 	checkPassword := func(password string) bool {
 		hash := strings.ToUpper(stringhelper.HashPassword(password))
-		response, err := http.Get(DefaultApiEndpoint + hash[:5])
+		response, err := http.Get(defaultApiEndpoint + hash[:firstKIndex])
 
 		if err != nil {
 			return false
@@ -44,9 +48,9 @@ func (v *CompromisedPasswordValidator) Process(
 		scanner := bufio.NewScanner(response.Body)
 
 		for scanner.Scan() {
-			parts := strings.Split(scanner.Text(), DelimiterHashResponse)
+			parts := strings.Split(scanner.Text(), delimiterHashResponse)
 
-			if len(parts) > 0 && parts[0] == hash[5:] {
+			if len(parts) > blankParts && parts[indexForPart] == hash[firstKIndex:] {
 				return true
 			}
 		}
@@ -66,6 +70,6 @@ func (v *CompromisedPasswordValidator) Process(
 	exception.AddViolations([]pkginterface.ConstraintViolationInterface{factory.ConstraintViolationFactory(
 		constraint,
 		value,
-		"Message",
+		enum.MessageMethod,
 	)})
 }

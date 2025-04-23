@@ -3,6 +3,7 @@ package validatorprocess
 import (
 	"fmt"
 	"github.com/Pashgunt/Validator/internal/contract"
+	"github.com/Pashgunt/Validator/internal/enum"
 	"github.com/Pashgunt/Validator/internal/factory"
 	"github.com/Pashgunt/Validator/pkg/interface"
 	"reflect"
@@ -31,6 +32,6 @@ func (v *RegexValidator) Process(
 	exception.AddViolations([]pkginterface.ConstraintViolationInterface{factory.ConstraintViolationFactory(
 		regexConstraintConverted,
 		value,
-		"Message",
+		enum.MessageMethod,
 	)})
 }

@@ -35,7 +35,7 @@ func (c *ComparisonValidator) Process(
 	exception.AddViolations([]pkginterface.ConstraintViolationInterface{factory.ConstraintViolationFactory(
 		comparisonConstraint,
 		value,
-		"Message",
+		enum.MessageMethod,
 	)})
 }
 
