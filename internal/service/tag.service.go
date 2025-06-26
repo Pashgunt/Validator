@@ -1,11 +1,14 @@
 package service
 
-import "strings"
-
-const (
-	SepDelimiter = "|"
+import (
+	"github.com/Pashgunt/Validator/internal/enum"
+	"strings"
 )
 
 func GetTags(tag string) []string {
-	return strings.Split(tag, SepDelimiter)
+	return strings.Split(tag, enum.SepDelimiter)
+}
+
+func GetTagName(tag string) string {
+	return strings.Split(tag, enum.AssertParamDelimiter)[0]
 }

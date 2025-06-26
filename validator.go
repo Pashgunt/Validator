@@ -9,7 +9,7 @@ import (
 	"github.com/Pashgunt/Validator/internal/service"
 	"github.com/Pashgunt/Validator/internal/violation"
 	"github.com/Pashgunt/Validator/pkg/interface"
-	"github.com/Pashgunt/Validator/pkg/usecase"
+	usecasetag "github.com/Pashgunt/Validator/pkg/usecase/tag"
 	"reflect"
 )
 
@@ -151,9 +151,22 @@ func (v *SimpleValidator) getOrCreateValidator(tag string, fieldName string) Ass
 	var validators AssertListValue
 
 	for _, tagItem := range service.GetTags(tag) {
-		switch tagItem {
+		switch service.GetTagName(tagItem) {
 		case string(enum.NotBlank):
-			usecase.NotBlankTag(fieldName, v.cache, tagItem)
+			usecasetag.NotBlankTag(fieldName, v.cache)
+			validators = append(validators, v.cache.Get(string(enum.NotBlank)))
+		case string(enum.Blank):
+			usecasetag.BlankTag(fieldName, v.cache)
+			validators = append(validators, v.cache.Get(string(enum.Blank)))
+		case string(enum.IsFalse):
+			usecasetag.IsFalseTag(fieldName, v.cache)
+			validators = append(validators, v.cache.Get(string(enum.IsFalse)))
+		case string(enum.IsTrue):
+			usecasetag.IsTrueTag(fieldName, v.cache)
+			validators = append(validators, v.cache.Get(string(enum.IsTrue)))
+		case string(enum.IsType):
+			usecasetag.IsTypeTag(fieldName, v.cache, tagItem)
+			validators = append(validators, v.cache.Get(string(enum.IsType)))
 		}
 	}
 

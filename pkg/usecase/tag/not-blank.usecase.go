@@ -1,4 +1,4 @@
-package usecase
+package tag
 
 import (
 	"fmt"
@@ -7,13 +7,13 @@ import (
 	"github.com/Pashgunt/Validator/pkg/factory"
 )
 
-func NotBlankTag(fieldName string, v contract.CacheInterface, tagItem string) {
+func NotBlankTag(fieldName string, v contract.CacheInterface) {
 	message := fmt.Sprintf(enum.ConstraintMessageDefault[enum.NotBlank], fieldName)
 
-	if ok := v.Exist(tagItem); ok {
-		constraint := v.Get(tagItem)
+	if ok := v.Exist(string(enum.NotBlank)); ok {
+		constraint := v.Get(string(enum.NotBlank))
 		constraint.SetMessage(message)
 	}
 
-	v.Set(tagItem, factory.NewNotBlank(message))
+	v.Set(string(enum.NotBlank), factory.NewNotBlank(message))
 }
